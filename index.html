@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Metanor Clinic Demos</title>
+<style>
+  :root { color-scheme: light; --green: #0b3f30; --gold: #b7924a; --ivory: #fbf8ef; --ink: #17271f; --muted: #55655c; --line: #dcd4bc; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--ivory); color: var(--ink); font: 17px/1.6 "Segoe UI", system-ui, sans-serif; }
+  main { width: min(860px, 100%); margin: auto; padding: clamp(40px, 8vw, 88px) 20px; }
+  h1 { margin: 0 0 8px; color: var(--green); font: 500 clamp(2rem, 5vw, 3rem)/1.15 Georgia, serif; }
+  p { margin: 0; }
+  .lead { color: var(--muted); }
+  .demos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 36px; }
+  a { display: grid; gap: 6px; padding: 24px; color: inherit; text-decoration: none; background: #fffdf8; border: 1px solid var(--line); border-top: 3px solid var(--gold); }
+  a:hover { border-color: var(--gold); }
+  a:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+  a b { color: var(--green); font: 500 1.35rem Georgia, serif; }
+  a span { color: var(--muted); font-size: .95rem; }
+  footer { margin-top: 32px; color: var(--muted); font-size: .88rem; }
+  @media (max-width: 620px) { .demos { grid-template-columns: minmax(0, 1fr); } }
+</style>
+</head>
+<body>
+<main>
+  <h1>Metanor clinic demos</h1>
+  <p class="lead">Two working templates for a multilingual clinic. All clinic details are sample data.</p>
+  <div class="demos">
+    <a href="demos/clinic-website/"><b>Clinic website</b><span>A premium website in Bengali, English and Arabic, with a WhatsApp booking flow.</span></a>
+    <a href="demos/whatsapp-assistant/"><b>WhatsApp assistant</b><span>A scripted patient chat with staff handover, booking tokens and a campaign view.</span></a>
+  </div>
+  <footer>Demos only. Neither page is connected to a clinic, WhatsApp or patient records.</footer>
+</main>
+</body>
+</html>

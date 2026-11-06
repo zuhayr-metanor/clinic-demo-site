@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 660" preserveAspectRatio="xMidYMid slice">
+  <title>Illustration of a clinic entrance with an arched window</title>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#cfe0d8"/>
+      <stop offset="1" stop-color="#eef1e4"/>
+    </linearGradient>
+    <linearGradient id="stone" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f5efdf"/>
+      <stop offset="1" stop-color="#ddd2b8"/>
+    </linearGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2e7564"/>
+      <stop offset=".55" stop-color="#14503f"/>
+      <stop offset="1" stop-color="#0b3f30"/>
+    </linearGradient>
+    <linearGradient id="shine" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity=".28"/>
+      <stop offset=".5" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="520" height="660" fill="url(#sky)"/>
+  <rect y="60" width="520" height="500" fill="url(#stone)"/>
+  <rect y="60" width="520" height="16" fill="#cfc3a4"/>
+  <rect x="26" y="76" width="44" height="484" fill="#efe7d2"/>
+  <rect x="450" y="76" width="44" height="484" fill="#d6caae"/>
+  <path d="M100 500V270a160 160 0 0 1 320 0v230z" fill="#c9bc9b"/>
+  <path d="M112 500V270a148 148 0 0 1 296 0v230z" fill="url(#glass)"/>
+  <path d="M112 500V270a148 148 0 0 1 296 0v230z" fill="url(#shine)"/>
+  <g fill="none" stroke="#b7924a" stroke-width="5">
+    <path d="M112 270h296M112 350h296M112 430h296"/>
+    <path d="M186 500V144M260 500V122M334 500V144"/>
+    <path d="M112 500V270a148 148 0 0 1 296 0v230z"/>
+  </g>
+  <rect x="222" y="430" width="76" height="70" fill="#082e23"/>
+  <path d="M260 430v70" stroke="#e2c98f" stroke-width="3"/>
+  <rect x="80" y="500" width="360" height="16" fill="#efe7d2"/>
+  <rect x="58" y="516" width="404" height="16" fill="#e3d9c0"/>
+  <rect x="36" y="532" width="448" height="16" fill="#d4c8aa"/>
+  <rect x="14" y="548" width="492" height="14" fill="#c6b999"/>
+  <rect y="562" width="520" height="98" fill="#a99d81"/>
+  <path d="M0 590h520M0 626h520M90 562v28M260 562v28M430 562v28M170 590v36M350 590v36M80 626v34M260 626v34M440 626v34" stroke="#94886c" stroke-width="2"/>
+</svg>

@@ -1,0 +1,654 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sample Patient Desk</title>
+<style>
+  :root {
+    color-scheme: light;
+    --ink: #17231d;
+    --muted: #5f6f67;
+    --line: #d9e0db;
+    --page: #f3f5f2;
+    --panel: #ffffff;
+    --brand: #0b5a3c;
+    --brand-soft: #e4f1ea;
+    --gold: #a97c1c;
+    --gold-soft: #fbf3df;
+    --danger: #a32a22;
+    --danger-soft: #fbeaea;
+    --chat-bg: #efe7dc;
+    --chat-out: #d9fdd3;
+    --chat-in: #ffffff;
+    --chat-head: #0b5a3c;
+    --font: "Segoe UI", "Nirmala UI", "Noto Sans Bengali", "Noto Sans Arabic", system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body { background: var(--page); color: var(--ink); font: 15px/1.45 var(--font); }
+  button { font: inherit; color: inherit; cursor: pointer; }
+  button:focus-visible, input:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+
+  .banner { background: var(--gold-soft); border-bottom: 1px solid #ecdcb2; padding: 8px 16px; text-align: center; font-size: 13.5px; }
+  .banner strong { color: #6e500f; }
+
+  .layout { display: grid; grid-template-columns: minmax(250px, 1fr) minmax(340px, 400px) minmax(280px, 1.15fr); gap: 20px; max-width: 1320px; margin: 0 auto; padding: 20px 16px 32px; align-items: start; }
+
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  .panel:last-child { margin-bottom: 0; }
+  .panel h2 { margin: 0 0 4px; font-size: 15px; }
+  .hint { margin: 0 0 12px; color: var(--muted); font-size: 13px; }
+
+  .lang { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .lang button { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 8px 4px; font-weight: 600; }
+  .lang button[aria-pressed="true"] { background: var(--brand); border-color: var(--brand); color: #fff; }
+
+  .scenarios { display: grid; gap: 6px; }
+  .scenarios button { display: flex; align-items: center; gap: 10px; text-align: left; background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 9px 10px; }
+  .scenarios button:hover { background: var(--brand-soft); border-color: #a9cdb9; }
+  .scenarios button:disabled { opacity: .45; cursor: not-allowed; background: #fff; }
+  .scenarios .num { flex: none; width: 22px; height: 22px; border-radius: 50%; background: var(--brand-soft); color: var(--brand); font-size: 12px; font-weight: 700; display: grid; place-items: center; }
+  .scenarios .danger .num { background: var(--danger-soft); color: var(--danger); }
+  .reset { width: 100%; margin-top: 10px; background: transparent; border: 1px dashed var(--line); border-radius: 8px; padding: 8px; color: var(--muted); }
+  .explain { background: var(--brand-soft); border-color: #bfdccd; }
+  .explain p { margin: 0; font-size: 14px; }
+
+  /* Phone */
+  .phone { background: #111; border-radius: 28px; padding: 9px; box-shadow: 0 12px 30px rgba(10, 30, 20, .22); position: sticky; top: 12px; }
+  .screen { border-radius: 20px; overflow: hidden; display: flex; flex-direction: column; height: min(760px, calc(100vh - 110px)); min-height: 520px; background: var(--chat-bg); }
+  .chat-head { background: var(--chat-head); color: #fff; display: flex; align-items: center; gap: 10px; padding: 10px 12px; flex: none; }
+  .avatar { width: 38px; height: 38px; border-radius: 50%; background: #f7e9bd; color: #6e500f; font-weight: 800; display: grid; place-items: center; flex: none; font-size: 13px; }
+  .chat-head .who { min-width: 0; }
+  .chat-head .name { font-weight: 600; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .chat-head .status { font-size: 12px; opacity: .85; }
+  .log { flex: 1; overflow-y: auto; padding: 12px 10px 6px; display: flex; flex-direction: column; gap: 6px; scroll-behavior: smooth; }
+  .source { align-self: center; background: #fff8e3; color: #6e500f; font-size: 12px; padding: 4px 10px; border-radius: 8px; text-align: center; margin-bottom: 4px; }
+  .msg { max-width: 86%; padding: 7px 9px 5px; border-radius: 10px; box-shadow: 0 1px 1px rgba(0,0,0,.1); white-space: pre-line; overflow-wrap: anywhere; font-size: 14.5px; animation: pop .16s ease-out; }
+  .msg.in { align-self: flex-start; background: var(--chat-in); border-top-left-radius: 2px; }
+  .msg.out { align-self: flex-end; background: var(--chat-out); border-top-right-radius: 2px; }
+  [dir="rtl"] .msg.in { align-self: flex-start; border-radius: 10px; border-top-right-radius: 2px; }
+  [dir="rtl"] .msg.out { align-self: flex-end; border-radius: 10px; border-top-left-radius: 2px; }
+  .msg.staff { border-inline-start: 3px solid var(--gold); }
+  .msg.urgent { background: var(--danger-soft); border-inline-start: 3px solid var(--danger); }
+  .sender { display: block; font-size: 12px; font-weight: 700; color: var(--gold); margin-bottom: 2px; }
+  .sample { display: block; margin-top: 5px; padding-top: 4px; border-top: 1px dashed var(--line); color: #8a6615; font-size: 11.5px; direction: ltr; text-align: left; }
+  .time { display: block; text-align: end; font-size: 10.5px; color: #667781; margin-top: 2px; direction: ltr; }
+  .card { background: #f5f6f4; border-radius: 8px; padding: 8px; margin-bottom: 6px; }
+  .card .pin { font-weight: 700; display: block; margin-bottom: 2px; }
+  .ticket { background: var(--brand-soft); border: 1px solid #bfdccd; border-radius: 8px; padding: 8px 10px; margin-top: 6px; }
+  .ticket b { font-size: 20px; color: var(--brand); display: block; direction: ltr; text-align: start; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 4px 0 2px; }
+  .chips button { background: #fff; border: 1px solid #b9d9c7; color: #075e3c; border-radius: 16px; padding: 6px 11px; font-size: 13.5px; font-weight: 600; }
+  .chips button:hover { background: var(--brand-soft); }
+  .typing { align-self: flex-start; background: #fff; border-radius: 10px; padding: 9px 12px; display: flex; gap: 4px; }
+  .typing i { width: 6px; height: 6px; border-radius: 50%; background: #93a19a; animation: blink 1s infinite; }
+  .typing i:nth-child(2) { animation-delay: .15s; }
+  .typing i:nth-child(3) { animation-delay: .3s; }
+  .composer { display: flex; gap: 6px; padding: 8px; background: #f0f2ef; flex: none; }
+  .composer input { flex: 1; min-width: 0; border: 1px solid #d6dcd8; border-radius: 20px; padding: 9px 14px; font: inherit; background: #fff; }
+  .composer button { flex: none; border: 0; border-radius: 20px; background: var(--brand); color: #fff; padding: 0 14px; font-weight: 600; }
+  @keyframes pop { from { transform: translateY(4px); } }
+  @keyframes blink { 50% { opacity: .3; } }
+  @media (prefers-reduced-motion: reduce) { .msg, .typing i { animation: none; } .log { scroll-behavior: auto; } }
+
+  /* Owner view */
+  .tag { display: inline-block; font-size: 11px; font-weight: 700; color: #6e500f; background: var(--gold-soft); border-radius: 5px; padding: 1px 6px; margin-left: 6px; vertical-align: 1px; }
+  .funnel { display: grid; gap: 9px; margin: 0; padding: 0; list-style: none; }
+  .funnel .row { display: flex; justify-content: space-between; gap: 8px; font-size: 13.5px; margin-bottom: 3px; }
+  .funnel .row b { font-variant-numeric: tabular-nums; }
+  .track { height: 9px; background: #edf0ee; border-radius: 5px; overflow: hidden; }
+  .fill { height: 100%; background: var(--brand); border-radius: 5px; transition: width .35s; }
+  .queue, .feed { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .queue li { border: 1px solid #ecdcb2; background: var(--gold-soft); border-radius: 8px; padding: 9px 10px; font-size: 13.5px; }
+  .queue li.urgent { border-color: #e7b7b3; background: var(--danger-soft); }
+  .queue li.done { background: #fff; border-color: var(--line); color: var(--muted); }
+  .queue b { display: block; }
+  .queue button { display: block; margin-top: 7px; background: var(--brand); color: #fff; border: 0; border-radius: 6px; padding: 5px 10px; font-size: 13px; font-weight: 600; }
+  .empty { color: var(--muted); font-size: 13.5px; margin: 0; }
+  .feed li { font-size: 13px; color: #36443d; padding-inline-start: 14px; position: relative; }
+  .feed li::before { content: ""; position: absolute; inset-inline-start: 0; top: 7px; width: 6px; height: 6px; background: var(--brand); border-radius: 50%; }
+  .actions-row { display: grid; gap: 6px; }
+  .secondary { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; text-align: left; }
+  .secondary:disabled { opacity: .45; cursor: not-allowed; }
+
+  @media (max-width: 1050px) {
+    .layout { grid-template-columns: minmax(0, 1fr); max-width: 560px; }
+    .phone-col { order: -1; }
+    .phone { position: static; }
+    .screen { height: min(680px, 82vh); }
+  }
+</style>
+</head>
+<body>
+<div class="banner"><strong>Demo only.</strong> Scripted example with sample data. It is not connected to any clinic, WhatsApp or patient records.</div>
+
+<main class="layout">
+  <section aria-label="Presenter controls">
+    <div class="panel">
+      <h2>Patient language</h2>
+      <p class="hint">Changing language restarts the chat.</p>
+      <div class="lang" id="langs">
+        <button data-lang="bn" aria-pressed="true">বাংলা</button>
+        <button data-lang="en" aria-pressed="false">English</button>
+        <button data-lang="ar" aria-pressed="false">العربية</button>
+      </div>
+    </div>
+    <div class="panel">
+      <h2>Demo script</h2>
+      <p class="hint">Click in order, or type your own question in the phone.</p>
+      <div class="scenarios" id="scenarios"></div>
+      <button class="reset" id="reset">Restart demo</button>
+    </div>
+    <div class="panel explain" aria-live="polite">
+      <h2>What this shows</h2>
+      <p id="explain">The patient arrives from a tracked flyer QR code, so the clinic knows which campaign started the chat.</p>
+    </div>
+  </section>
+
+  <section class="phone-col" aria-label="Patient chat demo">
+    <div class="phone">
+      <div class="screen" id="screen">
+        <header class="chat-head">
+          <div class="avatar" aria-hidden="true">SM</div>
+          <div class="who">
+            <div class="name" id="clinicName"></div>
+            <div class="status" id="clinicStatus"></div>
+          </div>
+        </header>
+        <div class="log" id="log" role="log" aria-live="polite"></div>
+        <form class="composer" id="composer">
+          <input id="input" autocomplete="off" aria-label="Type a patient message">
+          <button type="submit" id="send"></button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <section aria-label="Clinic view">
+    <div class="panel">
+      <h2>Staff handover queue</h2>
+      <p class="hint">Staff stay in charge of anything medical or unclear.</p>
+      <ul class="queue" id="queue"></ul>
+      <p class="empty" id="queueEmpty">No patients waiting.</p>
+    </div>
+    <div class="panel">
+      <h2>Friday flyer campaign <span class="tag">SAMPLE DATA</span></h2>
+      <p class="hint">Starts with made-up numbers, then updates as you use the demo.</p>
+      <ul class="funnel" id="funnel"></ul>
+    </div>
+    <div class="panel">
+      <h2>After booking</h2>
+      <p class="hint">Show what happens the day before the visit.</p>
+      <div class="actions-row">
+        <button class="secondary" id="reminder" disabled>Send sample reminder</button>
+      </div>
+    </div>
+    <div class="panel">
+      <h2>Live activity</h2>
+      <ul class="feed" id="feed"></ul>
+    </div>
+  </section>
+</main>
+
+<script>
+(() => {
+  const SAMPLE = 'Sample data';
+
+  // All clinic details are sample data. Unknown answers go to staff.
+  const T = {
+    bn: {
+      dir: 'ltr', locale: 'bn-BD', send: 'পাঠান', placeholder: 'মেসেজ লিখুন',
+      clinic: 'স্যাম্পল মেডিকেল কমপ্লেক্স', status: 'স্বয়ংক্রিয় সহকারী · স্টাফ সাহায্যের জন্য আছেন', staffName: 'রিসেপশন',
+      source: 'শুক্রবারের ফ্লায়ারের QR কোড থেকে শুরু',
+      welcome: 'আসসালামু আলাইকুম! স্যাম্পল মেডিকেল কমপ্লেক্সে স্বাগতম।\nআমি ক্লিনিকের স্বয়ংক্রিয় সহকারী। কীভাবে সাহায্য করতে পারি?',
+      menu: { book: 'অ্যাপয়েন্টমেন্ট বুক করুন', fee: 'ফি ও অফার', location: 'ঠিকানা', insurance: 'ইন্সুরেন্স', hours: 'সময়সূচি', doctors: 'ডাক্তার ও বিভাগ' },
+      fee: 'বর্তমান নমুনা অফার:\n• প্রথম পরামর্শ ফ্রি\n• ল্যাব পরীক্ষায় ২৫% ছাড়\n\nঅফার পেতে হোয়াটসঅ্যাপে অ্যাপয়েন্টমেন্ট বুক করতে হবে। অন্যান্য ফি জানতে চাইলে আমাদের স্টাফ আপনাকে জানাবেন।',
+      pinTitle: 'স্যাম্পল মেডিকেল কমপ্লেক্স',
+      address: 'নমুনা এলাকা, সিটি বুকস্টোরের পেছনে, মদিনা',
+      locationAfter: 'এখানে আসার জন্য ম্যাপ পিন এই মেসেজের সাথেই পাঠানো হবে।',
+      hours: 'বাংলাভাষী ডাক্তার: সকাল ৯টা থেকে দুপুর ১টা, এবং বিকাল ৪টা থেকে রাত ৯টা।\nশুক্রবারের অফার: বিকাল ৪টা থেকে রাত ৯টা।',
+      doctors: 'আমাদের বিভাগসমূহ:\nজেনারেল মেডিসিন, ডেন্টিস্ট্রি, শিশু, গাইনি, কার্ডিওলজি, অর্থোপেডিক্স, চক্ষু, নাক-কান-গলা, চর্ম, ফিজিওথেরাপি, ল্যাব, এক্স-রে, আল্ট্রাসাউন্ড ও জরুরি সেবা।\n\nবাংলাভাষী ডাক্তারও আছেন। নির্দিষ্ট কোনো ডাক্তার খুঁজলে আমাদের স্টাফ আপনাকে জানাবেন।',
+      askStaff: 'স্টাফের সাথে কথা বলুন',
+      handover: 'সঠিক উত্তরের জন্য আপনাকে আমাদের স্টাফের সাথে যুক্ত করছি। তাঁরা এই চ্যাটেই উত্তর দেবেন।',
+      medical: 'আমি চিকিৎসা পরামর্শ দিতে পারি না। আপনাকে আমাদের স্টাফের সাথে যুক্ত করছি, অথবা আপনি ডাক্তার দেখানোর জন্য অ্যাপয়েন্টমেন্ট বুক করতে পারেন।',
+      emergency: 'এটি জরুরি হতে পারে।\nএখনই ৯৯৭ নম্বরে কল করুন অথবা নিকটস্থ জরুরি বিভাগে যান। অ্যাপয়েন্টমেন্টের জন্য অপেক্ষা করবেন না।\n\nআমি আমাদের স্টাফকেও এখনই জানাচ্ছি।',
+      staffHello: 'ওয়ালাইকুম আসসালাম, আমি রিসেপশন থেকে বলছি। আমি এখন আপনাকে সাহায্য করছি।',
+      unknown: 'দুঃখিত, আমি ঠিক বুঝতে পারিনি। নিচের একটি বিষয় বেছে নিন, অথবা স্টাফের সাথে কথা বলুন।',
+      chooseDept: 'কোন বিভাগের জন্য অ্যাপয়েন্টমেন্ট চান?',
+      depts: ['জেনারেল মেডিসিন', 'ডেন্টিস্ট্রি', 'গাইনি', 'রক্ত পরীক্ষা'],
+      chooseSlot: (d, day) => `${d}\n${day}\n\nকোন সময়ে আসতে চান?`,
+      slots: ['বিকাল ৪:০০', 'বিকাল ৫:৩০', 'সন্ধ্যা ৭:০০', 'রাত ৮:০০'],
+      consent: 'আপনার নাম ও নম্বর শুধু এই অ্যাপয়েন্টমেন্ট পরিচালনার জন্য ব্যবহার করা হবে। হোয়াটসঅ্যাপে রিমাইন্ডার পেতে সম্মত আছেন?',
+      yes: 'হ্যাঁ, সম্মত', no: 'রিমাইন্ডার চাই না',
+      booked: (d, day, s) => `আপনার অ্যাপয়েন্টমেন্ট বুক হয়েছে।\n${d}\n${day}, ${s}`,
+      token: 'আপনার টোকেন নম্বর',
+      arrive: 'ক্লিনিকে এসে রিসেপশনে এই নম্বরটি দেখান।',
+      remindOn: 'আপনি ভিজিটের আগের দিন একটি রিমাইন্ডার পাবেন।',
+      remindOff: 'আপনাকে কোনো রিমাইন্ডার পাঠানো হবে না।',
+      reminder: (day, s, t) => `রিমাইন্ডার: আগামীকাল (${day}) ${s}-এ স্যাম্পল মেডিকেল কমপ্লেক্সে আপনার অ্যাপয়েন্টমেন্ট আছে।\nটোকেন: ${t}`,
+      rConfirm: 'আসছি', rChange: 'সময় বদলান', rCancel: 'বাতিল করুন',
+      confirmed: 'ধন্যবাদ, আপনার জন্য অপেক্ষা করব।',
+      cancelled: 'আপনার অ্যাপয়েন্টমেন্ট বাতিল হয়েছে। প্রয়োজন হলে আবার বুক করতে পারেন।',
+      pickOne: 'অনুগ্রহ করে নিচের একটি অপশন বেছে নিন।',
+      script: { fee: 'ফি কত?', location: 'ক্লিনিকটা কোথায়?', insurance: 'ইন্সুরেন্স চলে?', doctors: 'গাইনি ডাক্তার পাওয়া যায়?', book: 'শুক্রবার ডাক্তার দেখাতে চাই', medical: 'জ্বরের জন্য কী ওষুধ খাব?', emergency: 'আমার বুকে ব্যথা হচ্ছে' }
+    },
+    en: {
+      dir: 'ltr', locale: 'en-GB', send: 'Send', placeholder: 'Type a message',
+      clinic: 'Sample Medical Complex', status: 'Automated assistant · staff available to help', staffName: 'Reception',
+      source: 'Started from the Friday flyer QR code',
+      welcome: 'Assalamu alaikum! Welcome to Sample Medical Complex.\nI am the clinic’s automated assistant. How can I help?',
+      menu: { book: 'Book an appointment', fee: 'Fees and offer', location: 'Location', insurance: 'Insurance', hours: 'Hours', doctors: 'Doctors and departments' },
+      fee: 'Current sample offer:\n• Free first consultation\n• 25% off lab tests\n\nYou need to book through WhatsApp to get the offer. Our staff can confirm any other fees.',
+      pinTitle: 'Sample Medical Complex',
+      address: 'Sample District, behind City Bookstore, Madinah',
+      locationAfter: 'The live version would send the map pin with this message.',
+      hours: 'Bengali-speaking doctors: 9am to 1pm, and 4pm to 9pm.\nFriday offer: 4pm to 9pm.',
+      doctors: 'Our departments:\nGeneral medicine, dentistry, pediatrics, gynecology, cardiology, orthopedics, ophthalmology, ENT, dermatology, physiotherapy, laboratory, X-ray, ultrasound and emergency care.\n\nBengali-speaking doctors are also available. If you are looking for a particular doctor, our staff can confirm.',
+      askStaff: 'Talk to staff',
+      handover: 'To give you the right answer, I am connecting you with our staff. They will reply in this chat.',
+      medical: 'I can’t give medical advice. I am connecting you with our staff, or you can book an appointment to see a doctor.',
+      emergency: 'This could be an emergency.\nCall 997 now or go to the nearest emergency department. Please don’t wait for an appointment.\n\nI am alerting our staff now as well.',
+      staffHello: 'Wa alaikum assalam, this is reception. I can help you from here.',
+      unknown: 'Sorry, I didn’t quite understand. Please choose an option below or talk to our staff.',
+      chooseDept: 'Which department is the appointment for?',
+      depts: ['General medicine', 'Dentistry', 'Gynecology', 'Blood test'],
+      chooseSlot: (d, day) => `${d}\n${day}\n\nWhat time would you like?`,
+      slots: ['4:00 PM', '5:30 PM', '7:00 PM', '8:00 PM'],
+      consent: 'Your name and number will only be used to manage this appointment. Would you like reminders on WhatsApp?',
+      yes: 'Yes, I agree', no: 'No reminders',
+      booked: (d, day, s) => `Your appointment is booked.\n${d}\n${day}, ${s}`,
+      token: 'Your token number',
+      arrive: 'Show this number at reception when you arrive.',
+      remindOn: 'You will get a reminder the day before your visit.',
+      remindOff: 'We won’t send you any reminders.',
+      reminder: (day, s, t) => `Reminder: you have an appointment at Sample Medical Complex tomorrow (${day}) at ${s}.\nToken: ${t}`,
+      rConfirm: 'I’m coming', rChange: 'Change time', rCancel: 'Cancel',
+      confirmed: 'Thank you, we look forward to seeing you.',
+      cancelled: 'Your appointment has been cancelled. You can book again at any time.',
+      pickOne: 'Please choose one of the options below.',
+      script: { fee: 'How much is the fee?', location: 'Where is the clinic?', insurance: 'Do you accept insurance?', doctors: 'Do you have a gynecologist?', book: 'I want to see a doctor on Friday', medical: 'What medicine should I take for a fever?', emergency: 'I have chest pain' }
+    },
+    ar: {
+      dir: 'rtl', locale: 'ar-SA-u-ca-gregory-nu-latn', send: 'إرسال', placeholder: 'اكتب رسالة',
+      clinic: 'المجمع الطبي النموذجي', status: 'مساعد آلي · الموظفون متاحون للمساعدة', staffName: 'الاستقبال',
+      source: 'بدأت المحادثة من رمز QR في منشور الجمعة',
+      welcome: 'السلام عليكم! أهلاً بكم في المجمع الطبي النموذجي.\nأنا المساعد الآلي للمجمع. كيف يمكنني مساعدتك؟',
+      menu: { book: 'حجز موعد', fee: 'الرسوم والعرض', location: 'الموقع', insurance: 'التأمين', hours: 'ساعات العمل', doctors: 'الأطباء والأقسام' },
+      fee: 'العرض النموذجي الحالي:\n• أول استشارة مجانية\n• خصم 25% على التحاليل\n\nللحصول على العرض، يجب الحجز عبر واتساب. ويمكن لموظفينا تأكيد الرسوم الأخرى.',
+      pinTitle: 'المجمع الطبي النموذجي',
+      address: 'منطقة نموذجية، خلف مكتبة المدينة، المدينة المنورة',
+      locationAfter: 'في النسخة الفعلية سيُرسل موقع الخريطة مع هذه الرسالة.',
+      hours: 'الأطباء المتحدثون بالبنغالية: من 9 صباحاً إلى 1 ظهراً، ومن 4 مساءً إلى 9 مساءً.\nعرض الجمعة: من 4 عصراً إلى 9 مساءً.',
+      doctors: 'أقسامنا:\nالطب العام، الأسنان، الأطفال، النساء والولادة، القلب، العظام، العيون، الأنف والأذن والحنجرة، الجلدية، العلاج الطبيعي، المختبر، الأشعة، الموجات فوق الصوتية والطوارئ.\n\nيتوفر أيضاً أطباء يتحدثون البنغالية. وإذا كنت تبحث عن طبيب محدد، يمكن لموظفينا التأكيد لك.',
+      askStaff: 'التحدث مع موظف',
+      handover: 'لإعطائك الإجابة الصحيحة، سأحوّلك إلى موظفينا. وسيردون عليك في هذه المحادثة.',
+      medical: 'لا يمكنني تقديم نصائح طبية. سأحوّلك إلى موظفينا، أو يمكنك حجز موعد لمقابلة الطبيب.',
+      emergency: 'قد تكون هذه حالة طارئة.\nاتصل الآن على 997 أو توجه إلى أقرب قسم طوارئ. لا تنتظر موعداً.\n\nأنا أبلغ موظفينا الآن أيضاً.',
+      staffHello: 'وعليكم السلام، معك الاستقبال. سأساعدك من هنا.',
+      unknown: 'عذراً، لم أفهم تماماً. يرجى اختيار أحد الخيارات أدناه أو التحدث مع موظف.',
+      chooseDept: 'لأي قسم تريد حجز الموعد؟',
+      depts: ['الطب العام', 'الأسنان', 'النساء والولادة', 'تحليل دم'],
+      chooseSlot: (d, day) => `${d}\n${day}\n\nما الوقت المناسب لك؟`,
+      slots: ['4:00 م', '5:30 م', '7:00 م', '8:00 م'],
+      consent: 'سيُستخدم اسمك ورقمك لإدارة هذا الموعد فقط. هل ترغب في تلقي التذكيرات عبر واتساب؟',
+      yes: 'نعم، أوافق', no: 'بدون تذكيرات',
+      booked: (d, day, s) => `تم حجز موعدك.\n${d}\n${day}، ${s}`,
+      token: 'رقم الدور',
+      arrive: 'يرجى إظهار هذا الرقم في الاستقبال عند الوصول.',
+      remindOn: 'ستصلك رسالة تذكير قبل موعدك بيوم.',
+      remindOff: 'لن نرسل إليك أي تذكيرات.',
+      reminder: (day, s, t) => `تذكير: لديك موعد في المجمع الطبي النموذجي غداً (${day}) الساعة ${s}.\nرقم الدور: ${t}`,
+      rConfirm: 'سأحضر', rChange: 'تغيير الوقت', rCancel: 'إلغاء',
+      confirmed: 'شكراً لك، نتطلع إلى رؤيتك.',
+      cancelled: 'تم إلغاء موعدك. يمكنك الحجز مرة أخرى في أي وقت.',
+      pickOne: 'يرجى اختيار أحد الخيارات أدناه.',
+      script: { fee: 'كم الرسوم؟', location: 'وين موقع المجمع؟', insurance: 'هل تقبلون التأمين؟', doctors: 'هل يوجد طبيبة نساء؟', book: 'أريد مقابلة طبيب يوم الجمعة', medical: 'ما الدواء المناسب للحمى؟', emergency: 'عندي ألم في الصدر' }
+    }
+  };
+
+  // Checked in this order, so urgent and medical messages always win.
+  const INTENTS = [
+    ['emergency', ['বুকে ব্যথা', 'বুক ব্যথা', 'শ্বাস নিতে', 'শ্বাসকষ্ট', 'অজ্ঞান', 'রক্তপাত', 'chest pain', 'breathe', 'breathing', 'unconscious', 'bleeding', 'stroke', 'heart attack', 'ألم في الصدر', 'الم في الصدر', 'ضيق تنفس', 'ضيق في التنفس', 'إغماء', 'نزيف', 'جلطة']],
+    ['medical', ['ওষুধ', 'কী খাব', 'চিকিৎসা কী', 'জ্বর', 'ব্যথা', 'medicine', 'medication', 'tablet', ' dose ', 'what should i take', 'fever', ' pain ', 'دواء', 'ما العلاج', 'جرعة', 'حمى', 'ألم', 'الم ']],
+    ['insurance', ['ইন্সুরেন্স', 'ইনস্যুরেন্স', 'ইনসুরেন্স', 'তামিন', 'বীমা', 'বিমা', 'insurance', 'tameen', 'تأمين', 'تامين']],
+    ['book', ['বুকিং', 'বুক কর', 'অ্যাপয়েন্টমেন্ট', 'এপয়েন্টমেন্ট', 'শুক্রবার', 'ডাক্তার দেখা', 'book', 'appointment', 'friday', 'see a doctor', 'حجز', 'موعد', 'الجمعة']],
+    ['fee', [' ফি ', ' ফিস ', 'খরচ', 'দাম', 'টাকা', 'অফার', ' fee ', ' fees ', ' cost ', ' price ', ' charge ', 'how much', ' offer ', ' free ', 'discount', 'رسوم', 'سعر', 'تكلفة', ' كم ', ' العرض ', ' عرض ', 'خصم']],
+    ['location', ['কোথায়', 'ঠিকানা', 'লোকেশন', 'ম্যাপ', ' where ', 'location', 'address', ' map ', 'directions', ' وين ', ' أين ', ' اين ', 'موقع', 'عنوان']],
+    ['hours', ['সময়', 'খোলা', 'বন্ধ', 'কখন', ' hours ', ' open ', ' closed ', ' time ', ' when ', ' متى ', 'دوام', 'ساعات', 'مفتوح']],
+    ['doctors', ['ডাক্তার', 'ডেন্টিস্ট', 'দাঁত', 'গাইনি', 'বিভাগ', 'doctor', 'dentist', 'department', 'gyn', 'specialist', 'دكتور', 'طبيب', 'طبيبة', 'أسنان', 'قسم']],
+    ['greet', ['সালাম', 'হ্যালো', 'hello', 'salam', 'hi ', 'سلام', 'مرحبا']]
+  ];
+
+  const EXPLAIN = {
+    fee: 'The patient gets the current offer immediately. Any fee the clinic has not approved goes to staff, so nothing is guessed.',
+    location: 'A common patient question is answered right away, without staff having to resend the address.',
+    insurance: 'The assistant does not guess about insurance. It hands over and adds the patient to the staff queue.',
+    hours: 'Patients get one clear set of hours. The hours shown here are sample data.',
+    doctors: 'The assistant answers from the approved department list, and staff handle requests for a particular doctor.',
+    book: 'The patient moves from a question to a booking in a few taps, and the campaign is credited on the clinic’s dashboard.',
+    booked: 'The patient gets a token number for the Friday queue, and the booking is added to the dashboard.',
+    medical: 'The assistant knows where to stop. It refuses medical advice and passes the patient to staff.',
+    emergency: 'Possible emergencies are checked first. The patient is told to get urgent help, and staff are alerted straight away.',
+    staff: 'Staff can step in at any time, in the same chat, so the clinic stays in control.',
+    reminder: 'The reminder includes no medical details. Patients can confirm, change or cancel, and a cancelled slot can go to someone else.',
+    handover: 'When a question needs a person, the patient goes into the staff queue with the reason shown.',
+    unknown: 'If the assistant isn’t sure, it says so and offers a person instead of making up an answer.'
+  };
+
+  const SCRIPT = [
+    ['fee', 'Ask about the fee'],
+    ['location', 'Ask where the clinic is'],
+    ['insurance', 'Ask about insurance'],
+    ['doctors', 'Ask about a doctor'],
+    ['book', 'Book a Friday visit'],
+    ['medical', 'Ask for medical advice'],
+    ['emergency', 'Report chest pain']
+  ];
+
+  const $ = id => document.getElementById(id);
+  const log = $('log');
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const DELAY = reduced ? 0 : 650;
+
+  let lang = 'bn', state, runId = 0, chain = Promise.resolve();
+  const initialFunnel = () => [
+    ['QR scans and ad clicks', 420], ['WhatsApp chats', 186], ['Bookings', 74], ['Visits', 52], ['Paid tests or specialist visits', 19]
+  ];
+
+  const t = () => T[lang];
+  const el = (tag, cls, text) => { const n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; };
+  const clock = () => new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+  const scroll = () => { log.scrollTop = log.scrollHeight; };
+  const say = (key) => { if (EXPLAIN[key]) $('explain').textContent = EXPLAIN[key]; };
+
+  function nextFriday() {
+    const d = new Date();
+    d.setDate(d.getDate() + (((5 - d.getDay() + 7) % 7) || 7));
+    return d;
+  }
+  const dayName = () => new Intl.DateTimeFormat(t().locale, { weekday: 'long', day: 'numeric', month: 'long' }).format(nextFriday());
+
+  function clearChips() { log.querySelectorAll('.chips').forEach(c => c.remove()); }
+
+  function addMsg(side, text, o = {}) {
+    const m = el('div', 'msg ' + side + (o.staff ? ' staff' : '') + (o.urgent ? ' urgent' : ''));
+    if (o.staff) m.append(el('span', 'sender', t().staffName));
+    if (o.card) {
+      const c = el('div', 'card');
+      c.append(el('span', 'pin', o.card[0]), el('span', '', o.card[1]));
+      m.append(c);
+    }
+    m.append(el('span', '', text));
+    if (o.ticket) {
+      const k = el('div', 'ticket');
+      k.append(el('span', '', o.ticket[0]), el('b', '', o.ticket[1]));
+      m.append(k);
+    }
+    if (o.sample) m.append(el('span', 'sample', SAMPLE));
+    m.append(el('span', 'time', clock() + (side === 'out' ? ' ✓✓' : '')));
+    log.append(m);
+    scroll();
+  }
+
+  function addChips(items) {
+    if (!items || !items.length) return;
+    const row = el('div', 'chips');
+    items.forEach(([label, fn]) => {
+      const b = el('button', '', label);
+      b.type = 'button';
+      b.addEventListener('click', () => { clearChips(); addMsg('out', label); noteFirstChat(); fn(); });
+      row.append(b);
+    });
+    log.append(row);
+    scroll();
+  }
+
+  // Bot messages run in a queue, so replies never overlap.
+  function bot(text, o = {}) {
+    const mine = runId;
+    chain = chain.then(() => new Promise(res => {
+      if (mine !== runId) return res();
+      const dots = el('div', 'typing');
+      dots.append(el('i'), el('i'), el('i'));
+      log.append(dots); scroll();
+      setTimeout(() => {
+        dots.remove();
+        if (mine === runId) { addMsg('in', text, o); addChips(o.chips); }
+        res();
+      }, DELAY);
+    }));
+  }
+
+  function menuChips() {
+    const m = t().menu;
+    return [[m.book, startBooking], [m.fee, () => run('fee')], [m.location, () => run('location')], [m.insurance, () => run('insurance')], [m.hours, () => run('hours')], [m.doctors, () => run('doctors')]];
+  }
+
+  function activity(text) {
+    const li = el('li', '', `${clock()}  ${text}`);
+    $('feed').prepend(li);
+    while ($('feed').children.length > 6) $('feed').lastElementChild.remove();
+  }
+
+  function renderFunnel() {
+    const box = $('funnel');
+    box.textContent = '';
+    const max = state.funnel[0][1];
+    state.funnel.forEach(([label, value]) => {
+      const li = el('li');
+      const row = el('div', 'row');
+      row.append(el('span', '', label), el('b', '', String(value)));
+      const track = el('div', 'track');
+      const fill = el('div', 'fill');
+      fill.style.width = (value / max * 100) + '%';
+      track.append(fill);
+      li.append(row, track);
+      box.append(li);
+    });
+  }
+  function bump(i, by = 1) { state.funnel[i][1] += by; renderFunnel(); }
+
+  function noteFirstChat() {
+    if (state.chatted) return;
+    state.chatted = true;
+    bump(0); bump(1);
+    activity('New chat from the Friday flyer QR code');
+  }
+
+  function queue(reason, urgent) {
+    const li = el('li', urgent ? 'urgent' : '');
+    li.append(el('b', '', urgent ? 'URGENT: ' + reason : reason), el('span', '', 'Patient chat · Friday flyer campaign'));
+    const b = el('button', '', 'Reply as staff');
+    b.type = 'button';
+    b.addEventListener('click', () => {
+      addMsg('in', t().staffHello, { staff: true });
+      li.className = 'done';
+      b.remove();
+      say('staff');
+      activity('Staff took over the chat');
+    });
+    li.append(b);
+    $('queue').prepend(li);
+    $('queueEmpty').hidden = true;
+    activity(urgent ? 'Urgent alert sent to staff' : 'Chat handed over to staff');
+  }
+
+  function run(intent) {
+    const x = t();
+    state.step = null;
+    say(intent);
+    switch (intent) {
+      case 'fee':
+        bot(x.fee, { chips: [[x.menu.book, startBooking], [x.askStaff, () => handover('Patient asked about other fees')]] });
+        break;
+      case 'location':
+        bot(x.locationAfter, { card: [x.pinTitle, x.address], chips: [[x.menu.book, startBooking], [x.menu.hours, () => run('hours')]] });
+        break;
+      case 'insurance':
+        handover('Patient asked whether insurance is accepted');
+        break;
+      case 'hours':
+        bot(x.hours, { sample: true, chips: [[x.menu.book, startBooking], [x.menu.location, () => run('location')]] });
+        break;
+      case 'doctors':
+        bot(x.doctors, { chips: [[x.menu.book, startBooking], [x.askStaff, () => handover('Patient asked about a particular doctor')]] });
+        break;
+      case 'book':
+        startBooking();
+        break;
+      case 'medical':
+        queue('Patient asked for medical advice');
+        bot(x.medical, { chips: [[x.menu.book, startBooking]] });
+        break;
+      case 'emergency':
+        queue('Patient reported possible emergency symptoms', true);
+        bot(x.emergency, { urgent: true });
+        break;
+      case 'greet':
+        bot(x.welcome, { chips: menuChips() });
+        break;
+      default:
+        say('unknown');
+        bot(x.unknown, { chips: [...menuChips(), [x.askStaff, () => handover('Assistant could not answer the question')]] });
+    }
+  }
+
+  function handover(reason) {
+    say(reason.includes('insurance') ? 'insurance' : 'handover');
+    queue(reason);
+    bot(t().handover);
+  }
+
+  function startBooking() {
+    const x = t();
+    say('book');
+    state.step = 'dept';
+    bot(x.chooseDept, { chips: x.depts.map((d, i) => [d, () => pickDept(i)]) });
+  }
+
+  function pickDept(i) {
+    const x = t();
+    state.dept = i;
+    state.step = 'slot';
+    bot(x.chooseSlot(x.depts[i], dayName()), { sample: true, chips: x.slots.map((s, j) => [s, () => pickSlot(j)]) });
+  }
+
+  function pickSlot(j) {
+    const x = t();
+    state.slot = j;
+    if (state.booked) { confirmBooking(state.reminders, true); return; }
+    state.step = 'consent';
+    bot(x.consent, { chips: [[x.yes, () => confirmBooking(true)], [x.no, () => confirmBooking(false)]] });
+  }
+
+  function confirmBooking(reminders, changed) {
+    const x = t();
+    state.step = null;
+    state.reminders = reminders;
+    if (!state.booked) {
+      state.booked = true;
+      state.token = 'A-' + (17 + state.bookCount++);
+      bump(2);
+    }
+    say('booked');
+    activity(changed ? `Booking ${state.token} moved to a new time` : `Booking ${state.token} added for Friday`);
+    bot(x.booked(x.depts[state.dept], dayName(), x.slots[state.slot]) + '\n\n' + x.arrive + '\n' + (reminders ? x.remindOn : x.remindOff), {
+      ticket: [x.token, state.token]
+    });
+    $('reminder').disabled = !reminders;
+  }
+
+  function sendReminder() {
+    const x = t();
+    if (!state.booked) return;
+    say('reminder');
+    activity(`Reminder sent for ${state.token}`);
+    clearChips();
+    bot(x.reminder(dayName(), x.slots[state.slot], state.token), {
+      chips: [
+        [x.rConfirm, () => { activity(`${state.token} confirmed`); bot(x.confirmed); }],
+        [x.rChange, () => pickDept(state.dept)],
+        [x.rCancel, () => {
+          state.booked = false;
+          bump(2, -1);
+          $('reminder').disabled = true;
+          activity(`${state.token} cancelled, and the slot is free for the waitlist`);
+          bot(x.cancelled, { chips: [[x.menu.book, startBooking]] });
+        }]
+      ]
+    });
+  }
+
+  function patientSays(text) {
+    const clean = text.trim();
+    if (!clean) return;
+    clearChips();
+    addMsg('out', clean);
+    noteFirstChat();
+    // NFC keeps Bengali letters such as "য়" comparable however they were typed.
+    const low = (' ' + clean.normalize('NFC').toLowerCase().replace(/[?.,!؟،।]/g, ' ') + ' ');
+    const hit = INTENTS.find(([, words]) => words.some(w => low.includes(w.normalize('NFC'))));
+    run(hit ? hit[0] : 'unknown');
+  }
+
+  function renderScript() {
+    const box = $('scenarios');
+    box.textContent = '';
+    SCRIPT.forEach(([key, label], i) => {
+      const b = el('button', key === 'emergency' ? 'danger' : '');
+      b.type = 'button';
+      const n = el('span', 'num', String(i + 1));
+      const w = el('span');
+      w.append(el('span', '', label));
+      b.append(n, w);
+      b.title = T[lang].script[key];
+      b.addEventListener('click', () => patientSays(T[lang].script[key]));
+      box.append(b);
+    });
+  }
+
+  function start() {
+    runId++;
+    chain = Promise.resolve();
+    const x = t();
+    state = { step: null, chatted: false, booked: false, bookCount: 0, reminders: false, funnel: initialFunnel() };
+    log.textContent = '';
+    $('screen').dir = x.dir;
+    $('screen').lang = lang;
+    $('clinicName').textContent = x.clinic;
+    $('clinicStatus').textContent = x.status;
+    $('input').placeholder = x.placeholder;
+    $('send').textContent = x.send;
+    $('queue').textContent = '';
+    $('queueEmpty').hidden = false;
+    $('feed').textContent = '';
+    $('reminder').disabled = true;
+    $('explain').textContent = 'The patient arrives from a tracked flyer QR code, so the clinic knows which campaign started the chat.';
+    document.querySelectorAll('#langs button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
+    log.append(el('div', 'source', x.source));
+    renderFunnel();
+    renderScript();
+    activity('Demo ready');
+    bot(x.welcome, { chips: menuChips() });
+  }
+
+  $('composer').addEventListener('submit', e => {
+    e.preventDefault();
+    patientSays($('input').value);
+    $('input').value = '';
+  });
+  $('langs').addEventListener('click', e => {
+    const b = e.target.closest('button');
+    if (!b) return;
+    lang = b.dataset.lang;
+    start();
+  });
+  $('reset').addEventListener('click', start);
+  $('reminder').addEventListener('click', sendReminder);
+
+  start();
+})();
+</script>
+</body>
+</html>
