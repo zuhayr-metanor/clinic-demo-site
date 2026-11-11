@@ -234,6 +234,9 @@
   .pick-list button:hover { border-color: var(--blue); background: var(--blue-pale); transform: translateY(-1px); }
   .pick-list button.is-current { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
   .pick-note { margin-top: 16px; font-size: .85rem; color: var(--muted); }
+
+  .book-opts { display: grid; gap: 14px; align-content: center; }
+  .book-note { font-size: .92rem; color: rgba(255,255,255,.78); }
 </style>
 </head>
 <body>
@@ -376,14 +379,10 @@
           <p data-t="bookIntro"></p>
           <a class="btn btn-wa wa-link" href="#book" data-t="waCta"></a>
         </div>
-        <form class="book" id="bookForm">
-          <div class="field"><label for="fName" data-t="fName"></label><input id="fName" required autocomplete="off"></div>
-          <div class="field"><label for="fPhone" data-t="fPhone"></label><input id="fPhone" required inputmode="tel" dir="ltr" autocomplete="off" placeholder="05X XXX XXXX"></div>
-          <div class="field"><label for="fService" data-t="fService"></label><select id="fService"></select></div>
-          <div class="field"><label for="fDay" data-t="fDay"></label><select id="fDay"></select></div>
-          <button class="btn btn-sand wide" type="submit" data-t="fSubmit"></button>
-          <p class="done" id="formDone" role="status" hidden data-t="fDone"></p>
-        </form>
+        <div class="book book-opts">
+          <button class="btn btn-sand wide" type="button" id="bookOnline" data-t="bookOnline"></button>
+          <p class="book-note" data-t="bookNote"></p>
+        </div>
       </div>
     </div>
   </section>
@@ -432,7 +431,7 @@
       why: [['الأسعار قبل البدء', 'تعرف التكلفة قبل أي كشف أو تحليل.'], ['لغتك مفهومة', 'يتحدث فريقنا الإنجليزية والعربية والبنغالية.'], ['كل شيء في مكان واحد', 'الطبيب والمختبر والأشعة دون تنقل.'], ['مواعيد صباحية ومسائية', 'مواعيد تناسب عملك ودراستك.'], ['متابعة بعد الزيارة', 'تصلك التعليمات والتذكيرات عبر واتساب.']],
       jEye: 'خطوات بسيطة', jTitle: 'زيارتك من أول رسالة حتى المتابعة',
       steps: [['احجز عبر واتساب', 'اختر القسم والوقت المناسب.'], ['احصل على رقم دورك', 'يصلك رقم الدور ووقت الحضور.'], ['قابل طبيبك', 'يشرح الطبيب حالتك والخطوات التالية.'], ['النتائج والمتابعة', 'نبلغك عند جاهزية النتائج ونذكرك بالمتابعة.']],
-      bookTitle: 'احجز موعدك اليوم', bookIntro: 'اختر الخدمة واليوم المناسب، وسيؤكد فريقنا موعدك. أو ابدأ مباشرة عبر واتساب.',
+      bookTitle: 'احجز موعدك اليوم', bookIntro: 'احجز عبر واتساب، أو عبر صفحة الحجز الإلكترونية، واختر الخدمة والوقت هناك.', bookOnline: 'احجز إلكترونياً', bookNote: 'تحفظ منصة الحجز لدى المجمع حجزك وبياناتك، وليس هذا الموقع.', popOnlineTitle: 'يفتح هذا الزر صفحة الحجز', popOnlineText: 'في الموقع الفعلي، يفتح هذا الزر منصة الحجز لدى المجمع، حيث يختار المريض الخدمة والوقت، وتبقى بياناته لدى تلك المنصة.',
       fName: 'الاسم', fPhone: 'رقم الجوال', fService: 'الخدمة', fDay: 'اليوم المفضل', fSubmit: 'اطلب الموعد', fDone: 'تم استلام الطلب في هذا النموذج التجريبي. لم يُرسل أي شيء.',
       faqTitle: 'الأسئلة الشائعة', footAddr: 'حي نموذجي، المدينة المنورة · 05X XXX XXXX', footLic: 'رقم ترخيص وزارة الصحة: يُضاف من بيانات المجمع',
       days: ['السبت', 'الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس'],
@@ -457,7 +456,7 @@
       why: [['Prices before you start', 'Know the cost before any consultation or test.'], ['Your language is understood', 'Our team speaks English, Arabic and Bengali.'], ['Everything in one place', 'Doctor, lab and X-ray without going elsewhere.'], ['Morning and evening visits', 'Appointments that fit around work and school.'], ['Follow-up after your visit', 'Instructions and reminders arrive on WhatsApp.']],
       jEye: 'Simple steps', jTitle: 'Your visit, from first message to follow-up',
       steps: [['Book on WhatsApp', 'Choose your department and time.'], ['Get your token', 'Receive your token and arrival time.'], ['See your doctor', 'Your doctor explains the next steps.'], ['Results and follow-up', 'We tell you when results are ready and remind you to follow up.']],
-      bookTitle: 'Book your visit today', bookIntro: 'Choose a service and day, and our team will confirm your appointment. Or start straight away on WhatsApp.',
+      bookTitle: 'Book your visit today', bookIntro: 'Book on WhatsApp, or online on our booking page, where you choose the service and time.', bookOnline: 'Book online', bookNote: 'Your booking and details are kept by the clinic’s booking platform, not by this website.', popOnlineTitle: 'This button opens the booking page', popOnlineText: 'On the live site, this opens the clinic’s booking platform, where patients choose a service and time. Their details stay with that platform.',
       fName: 'Name', fPhone: 'Mobile number', fService: 'Service', fDay: 'Preferred day', fSubmit: 'Request appointment', fDone: 'Request received in this demo. Nothing was sent.',
       faqTitle: 'Frequently asked questions', footAddr: 'Sample District, Madinah · 05X XXX XXXX', footLic: 'MOH licence number: added from clinic details',
       days: ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'],
@@ -482,7 +481,7 @@
       why: [['শুরুর আগেই খরচ', 'পরামর্শ বা টেস্টের আগেই খরচ জেনে নিন।'], ['আপনার ভাষা বোঝা হয়', 'আমাদের টিম ইংরেজি, আরবি ও বাংলা বলে।'], ['সব এক জায়গায়', 'ডাক্তার, ল্যাব ও এক্স-রে একই ঠিকানায়।'], ['সকাল ও সন্ধ্যার সময়', 'কাজ ও পড়াশোনার সাথে মিলিয়ে অ্যাপয়েন্টমেন্ট।'], ['ভিজিটের পর ফলো-আপ', 'নির্দেশনা ও রিমাইন্ডার হোয়াটসঅ্যাপে পাবেন।']],
       jEye: 'সহজ ধাপ', jTitle: 'প্রথম মেসেজ থেকে ফলো-আপ পর্যন্ত',
       steps: [['হোয়াটসঅ্যাপে বুক করুন', 'বিভাগ ও সময় বেছে নিন।'], ['টোকেন নিন', 'টোকেন নম্বর ও আসার সময় পাবেন।'], ['ডাক্তার দেখান', 'ডাক্তার পরবর্তী ধাপ বুঝিয়ে বলবেন।'], ['ফলাফল ও ফলো-আপ', 'ফলাফল প্রস্তুত হলে জানাব এবং ফলো-আপের কথা মনে করিয়ে দেব।']],
-      bookTitle: 'আজই অ্যাপয়েন্টমেন্ট নিন', bookIntro: 'সেবা ও দিন বেছে নিন, আমাদের টিম নিশ্চিত করবে। অথবা সরাসরি হোয়াটসঅ্যাপে শুরু করুন।',
+      bookTitle: 'আজই অ্যাপয়েন্টমেন্ট নিন', bookIntro: 'হোয়াটসঅ্যাপে বুক করুন, অথবা অনলাইনে আমাদের বুকিং পেজে, যেখানে সেবা ও সময় বেছে নেবেন।', bookOnline: 'অনলাইনে বুক করুন', bookNote: 'আপনার বুকিং ও তথ্য ক্লিনিকের বুকিং প্ল্যাটফর্মে রাখা হয়, এই ওয়েবসাইটে নয়।', popOnlineTitle: 'এই বোতাম বুকিং পেজ খুলবে', popOnlineText: 'আসল ওয়েবসাইটে এটি ক্লিনিকের বুকিং প্ল্যাটফর্ম খুলবে, যেখানে রোগী সেবা ও সময় বেছে নেন। তাঁর তথ্য সেই প্ল্যাটফর্মেই থাকে।',
       fName: 'নাম', fPhone: 'মোবাইল নম্বর', fService: 'সেবা', fDay: 'পছন্দের দিন', fSubmit: 'অ্যাপয়েন্টমেন্ট চাই', fDone: 'এই ডেমোতে অনুরোধ নেওয়া হয়েছে। কিছুই পাঠানো হয়নি।',
       faqTitle: 'সাধারণ প্রশ্ন', footAddr: 'নমুনা এলাকা, মদিনা · 05X XXX XXXX', footLic: 'স্বাস্থ্য মন্ত্রণালয়ের লাইসেন্স নম্বর: ক্লিনিকের তথ্য থেকে যোগ হবে',
       days: ['শনিবার', 'রবিবার', 'সোমবার', 'মঙ্গলবার', 'বুধবার', 'বৃহস্পতিবার'],
@@ -554,7 +553,7 @@
         a.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(t.waText)}`;
         a.target = '_blank'; a.rel = 'noopener';
       } else {
-        a.onclick = e => { e.preventDefault(); $('waPop').showModal(); };
+        a.onclick = e => { e.preventDefault(); pop(T[lang].popTitle, T[lang].popText); };
       }
     });
 
@@ -594,12 +593,7 @@
     }));
     $('steps').replaceChildren(...t.steps.map(([k, v]) => { const li = make('li'); li.append(make('h3', '', k), make('p', '', v)); return li; }));
     $('faqList').replaceChildren(...t.faq.map(([q, a]) => { const d = make('details'); d.append(make('summary', '', q), make('p', '', a)); return d; }));
-    const keepS = $('fService').selectedIndex, keepD = $('fDay').selectedIndex;
     const all = CATEGORIES.flatMap(c => c.items);
-    $('fService').replaceChildren(...all.map((s, i) => { const o = make('option', '', s[lang][0]); o.value = i; return o; }));
-    $('fDay').replaceChildren(...t.days.map((d, i) => { const o = make('option', '', d); o.value = i; return o; }));
-    if (keepS >= 0) $('fService').selectedIndex = keepS;
-    if (keepD >= 0) $('fDay').selectedIndex = keepD;
   }
 
   const setLang = l => { lang = l; try { localStorage.setItem('clinicSiteLang', lang); } catch (e) {} render(); };
@@ -618,7 +612,9 @@
   if (((!saved && !fixed) || /[?&]choose\b/.test(location.search)) && typeof pick.showModal === 'function') pick.showModal();
   $('popClose').onclick = () => $('waPop').close();
   $('waPop').addEventListener('click', e => { if (e.target === $('waPop')) $('waPop').close(); });
-  $('bookForm').addEventListener('submit', e => { e.preventDefault(); $('formDone').hidden = false; });
+  // The live site links to the clinic's booking platform; this demo explains it instead of collecting details.
+  const pop = (title, text) => { $('popTitle').textContent = title; $('waPop').querySelector('p').textContent = text; $('waPop').showModal(); };
+  $('bookOnline').onclick = () => pop(T[lang].popOnlineTitle, T[lang].popOnlineText);
   render();
 })();
 </script>

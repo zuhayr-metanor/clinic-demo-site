@@ -39,21 +39,6 @@
   const fixed = /[?&]lang=(en|ar|bn)(?![a-z])/.test(location.search);
   if (((!saved && !fixed) || /[?&]choose(?![a-z])/.test(location.search)) && dlg.showModal) dlg.showModal();
 
-  /* ---- packages */
-  $('tiers').replaceChildren(...I.tiers.map((tier, i) => {
-    const t = tier[lang], card = make('article', 'tier' + (tier.main ? ' tier--main' : ''));
-    if (tier.main) card.append(make('span', 'tier__pop', ui.popular));
-    const head = make('div'); head.append(make('h3', '', t.n), make('p', 'tier__sub', t.s));
-    const both = make('div', 'tier__both'); ui.both.forEach(w => both.append(make('span', '', w)));
-    const list = make('ul', 'ticks');
-    if (i > 0) list.append(make('li', 'is-head', ui.everything(I.tiers[i - 1][lang].n)));
-    t.i.forEach(x => list.append(make('li', '', x)));
-    const a = make('a', 'btn ' + (tier.main ? 'btn--primary' : 'btn--secondary'), ui.tryTier);
-    a.href = `demos/whatsapp-assistant/#tier${i + 1}`;
-    card.append(head, both, list, a);
-    return card;
-  }));
-
   /* ---- walkthrough: the patient's WhatsApp, the handover, the staff reply */
   const F = I.flow[lang], phone = $('flowPhone'), list = $('flowList'), thread = $('flowThread'), head = $('flowHead'), field = $('flowField'), send = $('flowSend');
   const con = $('console'), stage = $('stage2'), steps = [...document.querySelectorAll('#steps [data-step]')];
@@ -159,9 +144,9 @@
     const sel = n => { const s = form.elements[n]; return s ? s.options[s.selectedIndex].value : ''; };
     const bespoke = kind() === 'bespoke';
     const lines = [
-      `Inquiry: ${bespoke ? 'Bespoke solution' : 'Clinic Suite setup'}`,
+      `Inquiry: ${bespoke ? 'Something else' : 'Clinic setup (website, booking platform, WhatsApp, staff training)'}`,
       `Name: ${v('name')}`, `Clinic: ${v('clinic')}`, `Email: ${v('email')}`, `Clinic size: ${sel('size')}`,
-      bespoke ? `Would like built: ${sel('area')}` : null,
+      bespoke ? `Needs: ${sel('area')}` : null,
       `Page language: ${I.names[lang]}`, '', v('message')
     ].filter(x => x !== null);
     const subject = `${bespoke ? ui.subjBespoke : ui.subjSetup}: ${v('clinic')}`;

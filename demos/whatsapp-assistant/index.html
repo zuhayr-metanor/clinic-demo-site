@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alexandria:wght@500;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=Hind+Siliguri:wght@400;500;600&display=swap">
 <style>
-  /* Layout: mobile first. Package switch, then the patient's phone, then scenarios, the clinic side and finally the package checklist. Three columns on wide screens. */
+  /* Layout: mobile first. The patient's phone, then the example chats, then what staff would see. Three columns on wide screens. */
   :root {
     color-scheme: light;
     --petrol-900: #082e23; --petrol-800: #0b3f30; --petrol-600: #1a7a5e;
@@ -191,6 +191,11 @@
   .suite-lock span { font: 600 13px/1 "Bricolage Grotesque", "Segoe UI", sans-serif; padding-left: 9px; border-left: 1.5px solid rgba(255,255,255,.7); white-space: nowrap; }
   .top h1 { flex: 1 1 auto; }
   @media (max-width: 640px) { .top h1 { flex-basis: 100%; } }
+
+  .side-note { font-size: 13px; color: var(--muted); margin: 2px 2px 10px; line-height: 1.45; }
+  .booked-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .booked-list li { padding: 9px 11px; border-radius: 10px; background: var(--ok-soft); font-size: 13.5px; line-height: 1.4; }
+  .booked-list b { display: block; }
 </style>
 </head>
 <body>
@@ -229,11 +234,6 @@
   </section>
 
   <div class="column controls">
-    <section class="panel pkg" aria-label="Package">
-      <div class="pkg-label"><h2 id="pkgLabel"></h2><a href="#compare" id="seeCompare"></a></div>
-      <div class="tabs" role="tablist" id="tabs"></div>
-      <p class="tier-line" id="tierLine"></p>
-    </section>
     <div class="panel">
       <h2 id="scenTitle"></h2>
       <p class="hint" id="scenHint"></p>
@@ -248,28 +248,20 @@
 
   <div class="clinic-wrap">
     <h2 class="side-title" id="clinicSide"></h2>
+    <p class="side-note" id="clinicNote"></p>
     <div class="column clinic" id="clinic" aria-label="Clinic view"></div>
   </div>
 </main>
-
-<section class="compare-wrap gutter" id="compare" aria-labelledby="compareTitle">
-  <div class="compare-card">
-    <div class="compare-head"><h2 id="compareTitle"></h2><p id="compareLead"></p></div>
-    <div id="compareTable"></div>
-    <p class="cmp-foot" id="compareFoot"></p>
-  </div>
-</section>
 
 <script>
 (() => {
   const T = {
     ar: {
-      banner: 'عرض تجريبي ببيانات نموذجية. غير متصل بواتساب أو بأي عيادة أو سجلات مرضى.', title: 'مساعد واتساب للعيادات والمجمعات', site: 'العودة إلى Metanor Clinic Suite', scenTitle: 'جرّب المحادثات', scenHint: 'اضغط أي مثال، أو اكتب سؤالك داخل الهاتف.', reset: 'إعادة العرض',
-      explainTitle: 'ما الذي تراه', included: 'ضمن هذه الباقة', lockedGroup: 'متاحة عند الترقية', bestFor: 'مناسبة لـ', pricing: 'طريقة التسعير', inherit: n => `كل ما في باقة ${n}، بالإضافة إلى:`, compare: 'مقارنة جميع الباقات', feature: 'الميزة', popular: 'الأكثر طلباً', cmpLead: 'كل ميزات الباقات الثلاث. اضغط «جرّب» لتشغيل الباقة في العرض أعلاه.', tryIt: 'جرّب', selected: 'المختارة', groupTitle: n => `متاحة من باقة ${n}`, pkgLabel: 'الباقة', seeCompare: 'قارن الباقات', clinicSide: 'ما يراه فريق العيادة',
-      clinic: 'المجمع الطبي النموذجي', status: 'مساعد آلي · الفريق متاح للمساعدة', staff: 'الاستقبال', send: 'إرسال', placeholder: 'اكتب رسالة', sar: 'ر.س', today: 'الأحد القادم', sample: 'بيانات نموذجية', token: 'رقم الدور',
-      queue: 'قائمة الموظفين', queueHint: 'أي سؤال طبي أو غير واضح يصل إلى الفريق.', queueEmpty: 'لا يوجد مرضى في الانتظار.', reply: 'الرد كموظف', replied: 'تم الرد', activity: 'النشاط المباشر', startPanel: 'نتائج هذا الشهر', autoPanel: 'الرسائل التلقائية هذا الشهر', schedPanel: 'مواعيد اليوم', pipePanel: 'فحوصات وتحويلات لم تُحجز', reportPanel: 'التقرير الشهري لصاحب المجمع', campPanel: 'مصدر المرضى حسب الحملة',
-      th: ['الوقت', 'الغرفة', 'المريض', 'القسم'], newPatient: 'مريض جديد', camp: ['منشور الجمعة', 'إعلان فيسبوك', 'خرائط Google'],
-      s: { chats: 'محادثات', bookings: 'حجوزات عبر واتساب', quiz: 'طلبات من دليل الأطباء', reviews: 'طلبات تقييم مرسلة', reminders: 'تذكيرات مرسلة', confirmed: 'تأكيدات حضور', slots: 'مواعيد أُعيد شغلها', recalls: 'رسائل متابعة', returned: 'مرضى عادوا' }, p: { quoted: 'طُلبت ولم تُحجز', followed: 'تمت متابعتها', booked: 'تم حجزها' }, r: { newp: 'مرضى جدد', noshow: 'إيراد من مواعيد أُنقذت', recall: 'إيراد المتابعات الدورية', follow: 'إيراد الفحوصات والتحويلات', total: 'إيراد إضافي تقديري' },
+      banner: 'عرض لتجربة المريض ببيانات نموذجية، غير متصل بواتساب أو بأي عيادة أو سجلات مرضى. عند التشغيل الفعلي تأتي محادثة واتساب عادةً من منصة الحجز لدى العيادة.', clinicNote: 'مثال فقط. عند التشغيل الفعلي يرى فريقك هذا داخل منصة الحجز التي تختارها العيادة، وتبقى بيانات المرضى لديها.', bookingsPanel: 'حجوزات أُرسلت إلى منصة الحجز', noBookings: 'لا توجد حجوزات بعد. جرّب «احجز موعداً».', title: 'عرض محادثة المريض على واتساب', site: 'العودة إلى Metanor Clinic Suite', scenTitle: 'جرّب المحادثات', scenHint: 'اضغط أي مثال، أو اكتب سؤالك داخل الهاتف.', reset: 'إعادة العرض',
+      explainTitle: 'ما الذي تراه', included: 'أمثلة على المحادثات', clinicSide: 'ما يراه فريقك (مثال)',
+      clinic: 'المجمع الطبي النموذجي', status: 'مساعد آلي · الفريق متاح للمساعدة', staff: 'الاستقبال', send: 'إرسال', placeholder: 'اكتب رسالة', today: 'الأحد القادم', sample: 'بيانات نموذجية', token: 'رقم الدور',
+      queue: 'محادثات بانتظار الفريق', queueHint: 'أي سؤال طبي أو غير واضح يصل إلى الفريق.', queueEmpty: 'لا يوجد مرضى في الانتظار.', reply: 'الرد كموظف', replied: 'تم الرد', activity: 'سجل المحادثة', campPanel: 'مصدر المرضى حسب الحملة',
+      newPatient: 'مريض جديد', camp: [],
       welcome: 'السلام عليكم، أهلاً بك في المجمع الطبي النموذجي.\nأنا المساعد الآلي للمجمع. كيف يمكنني مساعدتك؟', menu: { book: 'حجز موعد', fee: 'الأسعار', quiz: 'أي طبيب أحتاج؟', loc: 'الموقع وساعات العمل', ins: 'التأمين', urgent: 'حالة عاجلة', staff: 'التحدث مع موظف' },
       fee: 'أسعار نموذجية:\n• كشف عام: من 100 إلى 200 ر.س\n• أطفال: من 120 إلى 220 ر.س\n• تحاليل: من 50 إلى 300 ر.س\n• أشعة: من 100 إلى 250 ر.س\n• فحص عام: من 250 إلى 450 ر.س\n\nيؤكد الاستقبال السعر النهائي.', loc: 'حي نموذجي، المدينة المنورة.\nالسبت إلى الخميس، من 9 ص إلى 1 ظ ومن 4 م إلى 10 م.\nفي النسخة الفعلية يُرسل موقع الخريطة مع هذه الرسالة.', handover: 'لإعطائك إجابة صحيحة، سأحوّلك إلى فريق المجمع وسيردون عليك هنا.', medical: 'لا يمكنني تقديم نصائح طبية أو وصف أدوية. سأحوّلك إلى الفريق، ويمكنك أيضاً حجز موعد مع الطبيب.', emergency: 'قد تكون هذه حالة طارئة.\nاتصل الآن على 997 أو توجه إلى أقرب قسم طوارئ. لا تنتظر موعداً.\n\nأبلغت فريق المجمع أيضاً.', staffHello: 'وعليكم السلام، معك الاستقبال. سأساعدك من هنا.', unknown: 'عذراً، لم أفهم تماماً. اختر من القائمة أو تحدث مع موظف.',
       chooseT: 'لأي قسم تريد الحجز؟', treat: ['الطب العام', 'طب الأطفال', 'النساء والولادة', 'القلب', 'العظام', 'الجلدية', 'الأنف والأذن والحنجرة', 'تحليل دم'], chooseSlot: (t, d) => `${t}\n${d}\n\nما الوقت المناسب؟`, slots: ['9:30 ص', '11:00 ص', '4:30 م', '7:00 م'], consent: 'سيُستخدم اسمك ورقمك لإدارة موعدك. هل توافق على استلام التذكيرات عبر واتساب؟', yes: 'نعم، أوافق', no: 'بدون تذكيرات', booked: (t, d, s) => `تم حجز موعدك.\n${t}\n${d}، ${s}`, remindOn: 'ستصلك رسالة تذكير قبل موعدك بيوم.', remindOff: 'لن نرسل إليك تذكيرات.', remindStarter: 'سيؤكد الاستقبال موعدك إذا لزم الأمر.',
@@ -302,15 +294,14 @@
       langsQ: 'يمكنك مراسلتي بالإنجليزية أو العربية أو البنغالية، وتغيير اللغة في أي وقت. اختر لغة:',
       otherLangR: 'Please write the language you speak. A team member will help you.\n\nيرجى كتابة اللغة التي تتحدثها، وسيساعدك أحد الموظفين.',
       say: { fee: 'كم سعر الكشف؟', location: 'وين موقعكم؟', insurance: 'هل تقبلون التأمين؟', book: 'أبغى أحجز موعد', quiz: 'أي طبيب أحتاج؟', medical: 'أي دواء آخذ للحرارة؟', emergency: 'عندي ألم في الصدر', urgent: 'عندي حرارة مرتفعة', employer: 'نحتاج فحوصات لموظفي شركتنا' },
-      ex: { pick: 'أول ما يراه المريض: يختار لغته، ثم يستمر الحديث كله بها. يمكن إضافة لغات أخرى مثل الأردية والهندية عند الإعداد.', otherLang: 'لغة غير مدعومة بعد؟ يُحوَّل المريض إلى موظف يتحدثها، ويمكن إضافتها للمساعد عند الإعداد.', symptom: 'يصف المريض حالته بكلماته، فيقترح المساعد القسم المناسب دون تشخيص أو دواء، ويذكّر بالرقم 997.', notHere: 'إن لم يكن القسم متوفراً، لا يخمّن المساعد بل يحوّل المريض إلى الاستقبال.', records: 'النتائج والوصفات بيانات خاصة تحتاج إلى شخص، فيحوّلها المساعد مباشرة.', manage: 'يستطيع المريض التغيير أو الإلغاء بمجرد الطلب.', smalltalk: 'يرد المساعد على الشكر والتحية بشكل طبيعي، ويوضح أنه مساعد آلي عند السؤال.', start: 'يبدأ المريض من أي مكان ويحصل على رد فوري. اختر مثالاً لرؤية ما تقدمه هذه الباقة.', fee: 'يحصل المريض على أسعار وافق عليها المجمع، ولا يخمّن المساعد أي سعر آخر.', location: 'سؤال متكرر يُجاب فوراً دون انشغال الاستقبال.', insurance: 'لا يخمّن المساعد في التأمين، بل يحوّل المحادثة ويظهر السبب للموظف.', book: 'ينتقل المريض من السؤال إلى موعد برقم دور بضغطات قليلة.', booked: 'الحجز ورقم الدور يظهران فوراً في جهة المجمع.', quiz: 'يرشد المساعد المريض إلى القسم المناسب دون تقديم تشخيص.', medical: 'يعرف المساعد حدوده: لا نصائح طبية ولا أدوية، بل تحويل للفريق.', emergency: 'الحالات الخطرة تُفحص أولاً. يوجَّه المريض إلى 997 وينبَّه الفريق.', staff: 'يتدخل الموظف في المحادثة نفسها في أي وقت.', review: 'يصل طلب التقييم إلى كل مريض، مع طريق خاص للشكاوى.', reminder: 'التذكير لا يتضمن تفاصيل طبية، والإلغاء يتيح إعادة شغل الموعد.', queue: 'يقلل رقم الدور والوقت المحدد الازدحام في الأيام المزدحمة.', recall: 'يعيد المرضى للمتابعة دون مكالمات، ويمكنهم إيقاف الرسائل بضغطة.', results: 'يبلغ المريض بجاهزية نتائجه دون ذكر أي تفاصيل طبية.', aftercare: 'تعليمات يعتمدها الطبيب تقلل المكالمات، وأي تدهور يصل إلى الفريق فوراً.', urgent: 'تُرتب الحالات حسب الأولوية وتُحجز في اليوم نفسه، والخطرة تُوجَّه إلى 997.', followup: 'لا تذكر الرسالة نوع الفحص حفاظاً على الخصوصية.', form: 'تصل البيانات إلى ملف المريض قبل حضوره. النسخة الفعلية تستخدم نموذجاً آمناً خارج المحادثة.', employer: 'تصل طلبات الشركات إلى المنسق مباشرة مع تفاصيلها.', handover: 'عندما يحتاج السؤال إلى شخص، يدخل المريض قائمة الموظفين مع ظهور السبب.', unknown: 'إذا لم يكن المساعد متأكداً، يقول ذلك ويعرض التحدث مع موظف.' }
+      ex: { pick: 'أول ما يراه المريض: يختار لغته، ثم يستمر الحديث كله بها. يمكن إضافة لغات أخرى مثل الأردية والهندية عند الإعداد.', otherLang: 'لغة غير مدعومة بعد؟ يُحوَّل المريض إلى موظف يتحدثها، ويمكن إضافتها للمساعد عند الإعداد.', symptom: 'يصف المريض حالته بكلماته، فيقترح المساعد القسم المناسب دون تشخيص أو دواء، ويذكّر بالرقم 997.', notHere: 'إن لم يكن القسم متوفراً، لا يخمّن المساعد بل يحوّل المريض إلى الاستقبال.', records: 'النتائج والوصفات بيانات خاصة تحتاج إلى شخص، فيحوّلها المساعد مباشرة.', manage: 'يستطيع المريض التغيير أو الإلغاء بمجرد الطلب.', smalltalk: 'يرد المساعد على الشكر والتحية بشكل طبيعي، ويوضح أنه مساعد آلي عند السؤال.', start: 'يختار المريض لغته ويحصل على رد فوري. اختر مثالاً، أو اكتب سؤالك.', fee: 'يحصل المريض على أسعار وافق عليها المجمع، ولا يخمّن المساعد أي سعر آخر.', location: 'سؤال متكرر يُجاب فوراً دون انشغال الاستقبال.', insurance: 'لا يخمّن المساعد في التأمين، بل يحوّل المحادثة ويظهر السبب للموظف.', book: 'ينتقل المريض من السؤال إلى موعد برقم دور بضغطات قليلة.', booked: 'يصل الحجز ورقم الدور فوراً إلى منصة الحجز لدى العيادة، حيث يراهما الفريق.', quiz: 'يرشد المساعد المريض إلى القسم المناسب دون تقديم تشخيص.', medical: 'يعرف المساعد حدوده: لا نصائح طبية ولا أدوية، بل تحويل للفريق.', emergency: 'الحالات الخطرة تُفحص أولاً. يوجَّه المريض إلى 997 وينبَّه الفريق.', staff: 'يتدخل الموظف في المحادثة نفسها في أي وقت.', review: 'يصل طلب التقييم إلى كل مريض، مع طريق خاص للشكاوى.', reminder: 'التذكير لا يتضمن تفاصيل طبية، والإلغاء يتيح إعادة شغل الموعد.', queue: 'يقلل رقم الدور والوقت المحدد الازدحام في الأيام المزدحمة.', recall: 'يعيد المرضى للمتابعة دون مكالمات، ويمكنهم إيقاف الرسائل بضغطة.', results: 'يبلغ المريض بجاهزية نتائجه دون ذكر أي تفاصيل طبية.', aftercare: 'تعليمات يعتمدها الطبيب تقلل المكالمات، وأي تدهور يصل إلى الفريق فوراً.', urgent: 'تُرتب الحالات حسب الأولوية وتُحجز في اليوم نفسه، والخطرة تُوجَّه إلى 997.', followup: 'لا تذكر الرسالة نوع الفحص حفاظاً على الخصوصية.', form: 'تصل البيانات إلى ملف المريض قبل حضوره. النسخة الفعلية تستخدم نموذجاً آمناً خارج المحادثة.', employer: 'تصل طلبات الشركات إلى المنسق مباشرة مع تفاصيلها.', handover: 'عندما يحتاج السؤال إلى شخص، يدخل المريض قائمة الموظفين مع ظهور السبب.', unknown: 'إذا لم يكن المساعد متأكداً، يقول ذلك ويعرض التحدث مع موظف.' }
     },
     en: {
-      banner: 'Demo with sample data. Not connected to WhatsApp, any clinic or patient records.', title: 'WhatsApp assistant for clinics', site: 'Back to Metanor Clinic Suite', scenTitle: 'Try the conversations', scenHint: 'Click any example, or type your own question in the phone.', reset: 'Restart demo',
-      explainTitle: 'What you are seeing', included: 'In this package', lockedGroup: 'Available when you upgrade', bestFor: 'Best for', pricing: 'Pricing', inherit: n => `Everything in ${n}, plus:`, compare: 'Compare all packages', feature: 'Feature', popular: 'Most popular', cmpLead: 'Every feature in all three packages. Tap Try to run a package in the demo above.', tryIt: 'Try', selected: 'Selected', groupTitle: n => `Included from ${n}`, pkgLabel: 'Package', seeCompare: 'Compare packages', clinicSide: 'What the clinic team sees',
-      clinic: 'Sample Medical Complex', status: 'Automated assistant · team available to help', staff: 'Reception', send: 'Send', placeholder: 'Type a message', sar: 'SAR', today: 'next Sunday', sample: 'Sample data', token: 'Token number',
-      queue: 'Staff queue', queueHint: 'Anything medical or unclear reaches your team.', queueEmpty: 'No patients waiting.', reply: 'Reply as staff', replied: 'Replied', activity: 'Live activity', startPanel: 'This month’s results', autoPanel: 'Automatic messages this month', schedPanel: 'Today’s schedule', pipePanel: 'Tests and referrals not booked', reportPanel: 'Monthly owner report', campPanel: 'Patients by campaign',
-      th: ['Time', 'Room', 'Patient', 'Department'], newPatient: 'New patient', camp: ['Friday flyer', 'Facebook ad', 'Google Maps'],
-      s: { chats: 'Chats', bookings: 'WhatsApp bookings', quiz: 'Doctor finder leads', reviews: 'Review requests sent', reminders: 'Reminders sent', confirmed: 'Visits confirmed', slots: 'Slots refilled', recalls: 'Recall messages', returned: 'Patients returned' }, p: { quoted: 'Requested, not booked', followed: 'Followed up', booked: 'Now booked' }, r: { newp: 'New patients', noshow: 'Revenue from saved visits', recall: 'Revenue from recalls', follow: 'Revenue from tests and referrals', total: 'Estimated added revenue' },
+      banner: 'A demo of the patient experience with sample data. Not connected to WhatsApp, any clinic or patient records. In a live setup, the WhatsApp chat usually comes from the clinic’s booking platform.', clinicNote: 'Example only. In a live setup, your staff see this inside the booking platform your clinic chooses, and patient data stays there.', bookingsPanel: 'Bookings sent to the booking platform', noBookings: 'No bookings yet. Try “Book a visit”.', title: 'WhatsApp patient chat demo', site: 'Back to Metanor Clinic Suite', scenTitle: 'Try the conversations', scenHint: 'Click any example, or type your own question in the phone.', reset: 'Restart demo',
+      explainTitle: 'What you are seeing', included: 'Example chats', clinicSide: 'What your staff would see (example)',
+      clinic: 'Sample Medical Complex', status: 'Automated assistant · team available to help', staff: 'Reception', send: 'Send', placeholder: 'Type a message', today: 'next Sunday', sample: 'Sample data', token: 'Token number',
+      queue: 'Chats waiting for staff', queueHint: 'Anything medical or unclear reaches your team.', queueEmpty: 'No patients waiting.', reply: 'Reply as staff', replied: 'Replied', activity: 'Chat log', campPanel: 'Patients by campaign',
+      newPatient: 'New patient', camp: [],
       welcome: 'Assalamu alaikum, welcome to Sample Medical Complex.\nI am the clinic’s automated assistant. How can I help?', menu: { book: 'Book a visit', fee: 'Prices', quiz: 'Which doctor do I need?', loc: 'Location and hours', ins: 'Insurance', urgent: 'Urgent problem', staff: 'Talk to staff' },
       fee: 'Sample prices:\n• General consultation: SAR 100–200\n• Pediatrics: SAR 120–220\n• Lab tests: SAR 50–300\n• X-ray: SAR 100–250\n• General check-up: SAR 250–450\n\nReception confirms the final price.', loc: 'Sample District, Madinah.\nSaturday to Thursday, 9am–1pm and 4pm–10pm.\nThe live version sends the map pin with this message.', handover: 'To give you the right answer, I am connecting you with the clinic team. They will reply here.', medical: 'I can’t give medical advice or recommend medicines. I am connecting you with the team, and you can also book a visit with the doctor.', emergency: 'This could be an emergency.\nCall 997 now or go to the nearest emergency department. Please don’t wait for an appointment.\n\nI have alerted the clinic team too.', staffHello: 'Wa alaikum assalam, this is reception. I can help you from here.', unknown: 'Sorry, I didn’t quite understand. Please choose from the menu or talk to staff.',
       chooseT: 'Which department would you like to book?', treat: ['General medicine', 'Pediatrics', 'Gynecology', 'Cardiology', 'Orthopedics', 'Dermatology', 'Ear, nose and throat', 'Blood test'], chooseSlot: (t, d) => `${t}\n${d}\n\nWhat time suits you?`, slots: ['9:30 AM', '11:00 AM', '4:30 PM', '7:00 PM'], consent: 'Your name and number will be used to manage your appointment. Do you agree to receive reminders on WhatsApp?', yes: 'Yes, I agree', no: 'No reminders', booked: (t, d, s) => `Your appointment is booked.\n${t}\n${d}, ${s}`, remindOn: 'You will get a reminder the day before your visit.', remindOff: 'We won’t send you reminders.', remindStarter: 'Reception will confirm your visit if needed.',
@@ -343,15 +334,14 @@
       langsQ: 'You can write to me in English, Arabic or Bengali, and change language at any time. Choose one:',
       otherLangR: 'Please write the language you speak. A team member will help you.\n\nيرجى كتابة اللغة التي تتحدثها، وسيساعدك أحد الموظفين.',
       say: { fee: 'How much is a consultation?', location: 'Where are you located?', insurance: 'Do you accept insurance?', book: 'I want to book a visit', quiz: 'Which doctor do I need?', medical: 'What medicine should I take for a fever?', emergency: 'I have chest pain', urgent: 'I have a high fever', employer: 'We need check-ups for our employees' },
-      ex: { pick: 'The first thing a patient sees: they choose their language, and the whole chat continues in it. More languages, such as Urdu or Hindi, can be added at setup.', otherLang: 'A language the assistant doesn’t speak yet goes to a staff member who does, and can be added at setup.', symptom: 'The patient describes how they feel in their own words. The assistant suggests a department without a diagnosis or medicine, and repeats the 997 safety line.', notHere: 'When the clinic doesn’t offer a department, the assistant doesn’t guess. It passes the patient to reception.', records: 'Results and prescriptions are private and need a person, so the assistant hands over straight away.', manage: 'Patients can change or cancel by simply asking.', smalltalk: 'The assistant answers thanks and goodbyes naturally, and says it is automated when asked.', start: 'Patients start from anywhere and get an instant reply. Pick an example to see what this package does.', fee: 'The patient gets clinic-approved prices. The assistant never guesses another price.', location: 'A repeat question is answered at once, without tying up reception.', insurance: 'The assistant doesn’t guess about insurance. It hands over and shows staff why.', book: 'The patient goes from a question to a visit with a token in a few taps.', booked: 'The booking and token appear straight away on the clinic’s side.', quiz: 'The assistant points the patient to a department without giving a diagnosis.', medical: 'The assistant knows its limits: no medical advice or medicines, just a handover to staff.', emergency: 'Dangerous symptoms are checked first. The patient is sent to 997 and staff are alerted.', staff: 'Staff can step into the same chat at any time.', review: 'Every patient gets a review request, with a private route for complaints.', reminder: 'Reminders carry no medical details. A cancellation lets the clinic refill the slot.', queue: 'Tokens and arrival times help spread out crowded days.', recall: 'Patients return for follow-up without phone calls, and can stop messages with one tap.', results: 'The patient learns results are ready, with no medical details in the message.', aftercare: 'Doctor-approved instructions cut phone calls, and anyone getting worse reaches staff at once.', urgent: 'Cases are prioritised and booked the same day. Dangerous ones are sent to 997.', followup: 'The message names no test, to protect privacy.', form: 'Details reach the patient’s file before they arrive. The live version uses a secure form outside the chat.', employer: 'Company requests go straight to the coordinator with the details.', handover: 'When a question needs a person, the patient joins the staff queue with the reason shown.', unknown: 'If the assistant isn’t sure, it says so and offers a person.' }
+      ex: { pick: 'The first thing a patient sees: they choose their language, and the whole chat continues in it. More languages, such as Urdu or Hindi, can be added at setup.', otherLang: 'A language the assistant doesn’t speak yet goes to a staff member who does, and can be added at setup.', symptom: 'The patient describes how they feel in their own words. The assistant suggests a department without a diagnosis or medicine, and repeats the 997 safety line.', notHere: 'When the clinic doesn’t offer a department, the assistant doesn’t guess. It passes the patient to reception.', records: 'Results and prescriptions are private and need a person, so the assistant hands over straight away.', manage: 'Patients can change or cancel by simply asking.', smalltalk: 'The assistant answers thanks and goodbyes naturally, and says it is automated when asked.', start: 'The patient chooses their language and gets an instant reply. Pick an example chat, or type your own question.', fee: 'The patient gets clinic-approved prices. The assistant never guesses another price.', location: 'A repeat question is answered at once, without tying up reception.', insurance: 'The assistant doesn’t guess about insurance. It hands over and shows staff why.', book: 'The patient goes from a question to a visit with a token in a few taps.', booked: 'The booking and token go straight into the clinic’s booking platform, where staff see them.', quiz: 'The assistant points the patient to a department without giving a diagnosis.', medical: 'The assistant knows its limits: no medical advice or medicines, just a handover to staff.', emergency: 'Dangerous symptoms are checked first. The patient is sent to 997 and staff are alerted.', staff: 'Staff can step into the same chat at any time.', review: 'Every patient gets a review request, with a private route for complaints.', reminder: 'Reminders carry no medical details. A cancellation lets the clinic refill the slot.', queue: 'Tokens and arrival times help spread out crowded days.', recall: 'Patients return for follow-up without phone calls, and can stop messages with one tap.', results: 'The patient learns results are ready, with no medical details in the message.', aftercare: 'Doctor-approved instructions cut phone calls, and anyone getting worse reaches staff at once.', urgent: 'Cases are prioritised and booked the same day. Dangerous ones are sent to 997.', followup: 'The message names no test, to protect privacy.', form: 'Details reach the patient’s file before they arrive. The live version uses a secure form outside the chat.', employer: 'Company requests go straight to the coordinator with the details.', handover: 'When a question needs a person, the patient joins the staff queue with the reason shown.', unknown: 'If the assistant isn’t sure, it says so and offers a person.' }
     },
     bn: {
-      banner: 'নমুনা তথ্যসহ ডেমো। হোয়াটসঅ্যাপ, কোনো ক্লিনিক বা রোগীর রেকর্ডের সাথে যুক্ত নয়।', title: 'ক্লিনিকের জন্য হোয়াটসঅ্যাপ সহকারী', site: 'Metanor Clinic Suite-এ ফিরে যান', scenTitle: 'কথোপকথন চেষ্টা করুন', scenHint: 'যেকোনো উদাহরণে ক্লিক করুন, অথবা ফোনে নিজের প্রশ্ন লিখুন।', reset: 'আবার শুরু করুন',
-      explainTitle: 'আপনি যা দেখছেন', included: 'এই প্যাকেজে আছে', lockedGroup: 'আপগ্রেড করলে পাবেন', bestFor: 'যাদের জন্য', pricing: 'মূল্য', inherit: n => `${n}-এর সবকিছু, সাথে:`, compare: 'সব প্যাকেজ তুলনা করুন', feature: 'সুবিধা', popular: 'সবচেয়ে জনপ্রিয়', cmpLead: 'তিনটি প্যাকেজের সব সুবিধা। উপরের ডেমোতে চালাতে “দেখুন” চাপুন।', tryIt: 'দেখুন', selected: 'নির্বাচিত', groupTitle: n => `${n} থেকে পাওয়া যায়`, pkgLabel: 'প্যাকেজ', seeCompare: 'প্যাকেজ তুলনা', clinicSide: 'ক্লিনিকের টিম যা দেখে',
-      clinic: 'স্যাম্পল মেডিকেল কমপ্লেক্স', status: 'স্বয়ংক্রিয় সহকারী · স্টাফ সাহায্যের জন্য আছেন', staff: 'রিসেপশন', send: 'পাঠান', placeholder: 'মেসেজ লিখুন', sar: 'রিয়াল', today: 'আগামী রবিবার', sample: 'নমুনা তথ্য', token: 'টোকেন নম্বর',
-      queue: 'স্টাফ তালিকা', queueHint: 'চিকিৎসা-সংক্রান্ত বা অস্পষ্ট সব প্রশ্ন আপনার টিমের কাছে যায়।', queueEmpty: 'কোনো রোগী অপেক্ষায় নেই।', reply: 'স্টাফ হিসেবে উত্তর দিন', replied: 'উত্তর দেওয়া হয়েছে', activity: 'সরাসরি কার্যক্রম', startPanel: 'এই মাসের ফলাফল', autoPanel: 'এই মাসের স্বয়ংক্রিয় মেসেজ', schedPanel: 'আজকের সময়সূচি', pipePanel: 'বুক না করা টেস্ট ও রেফারেল', reportPanel: 'মালিকের মাসিক রিপোর্ট', campPanel: 'প্রচারণা অনুযায়ী রোগী',
-      th: ['সময়', 'কক্ষ', 'রোগী', 'বিভাগ'], newPatient: 'নতুন রোগী', camp: ['শুক্রবারের ফ্লায়ার', 'ফেসবুক বিজ্ঞাপন', 'গুগল ম্যাপস'],
-      s: { chats: 'চ্যাট', bookings: 'হোয়াটসঅ্যাপ বুকিং', quiz: 'ডাক্তার খোঁজার অনুরোধ', reviews: 'রিভিউ অনুরোধ', reminders: 'রিমাইন্ডার', confirmed: 'নিশ্চিত ভিজিট', slots: 'পূরণ হওয়া স্লট', recalls: 'ফলো-আপ মেসেজ', returned: 'ফিরে আসা রোগী' }, p: { quoted: 'অনুরোধ করা, বুক হয়নি', followed: 'ফলো-আপ করা হয়েছে', booked: 'এখন বুক হয়েছে' }, r: { newp: 'নতুন রোগী', noshow: 'রক্ষা পাওয়া ভিজিটের আয়', recall: 'ফলো-আপের আয়', follow: 'টেস্ট ও রেফারেলের আয়', total: 'আনুমানিক অতিরিক্ত আয়' },
+      banner: 'নমুনা তথ্যসহ রোগীর অভিজ্ঞতার ডেমো। হোয়াটসঅ্যাপ, কোনো ক্লিনিক বা রোগীর রেকর্ডের সাথে যুক্ত নয়। আসল চালুর সময় হোয়াটসঅ্যাপ চ্যাট সাধারণত ক্লিনিকের বুকিং প্ল্যাটফর্ম থেকে আসে।', clinicNote: 'শুধু উদাহরণ। আসল চালুর সময় আপনার স্টাফ এটি ক্লিনিকের বেছে নেওয়া বুকিং প্ল্যাটফর্মের ভেতরে দেখেন, এবং রোগীর তথ্য সেখানেই থাকে।', bookingsPanel: 'বুকিং প্ল্যাটফর্মে পাঠানো বুকিং', noBookings: 'এখনো কোনো বুকিং নেই। “ভিজিট বুক করুন” চেষ্টা করুন।', title: 'হোয়াটসঅ্যাপে রোগীর চ্যাটের ডেমো', site: 'Metanor Clinic Suite-এ ফিরে যান', scenTitle: 'কথোপকথন চেষ্টা করুন', scenHint: 'যেকোনো উদাহরণে ক্লিক করুন, অথবা ফোনে নিজের প্রশ্ন লিখুন।', reset: 'আবার শুরু করুন',
+      explainTitle: 'আপনি যা দেখছেন', included: 'চ্যাটের উদাহরণ', clinicSide: 'আপনার স্টাফ যা দেখবেন (উদাহরণ)',
+      clinic: 'স্যাম্পল মেডিকেল কমপ্লেক্স', status: 'স্বয়ংক্রিয় সহকারী · স্টাফ সাহায্যের জন্য আছেন', staff: 'রিসেপশন', send: 'পাঠান', placeholder: 'মেসেজ লিখুন', today: 'আগামী রবিবার', sample: 'নমুনা তথ্য', token: 'টোকেন নম্বর',
+      queue: 'স্টাফের অপেক্ষায় চ্যাট', queueHint: 'চিকিৎসা-সংক্রান্ত বা অস্পষ্ট সব প্রশ্ন আপনার টিমের কাছে যায়।', queueEmpty: 'কোনো রোগী অপেক্ষায় নেই।', reply: 'স্টাফ হিসেবে উত্তর দিন', replied: 'উত্তর দেওয়া হয়েছে', activity: 'চ্যাটের লগ', campPanel: 'প্রচারণা অনুযায়ী রোগী',
+      newPatient: 'নতুন রোগী', camp: [],
       welcome: 'আসসালামু আলাইকুম, স্যাম্পল মেডিকেল কমপ্লেক্সে স্বাগতম।\nআমি ক্লিনিকের স্বয়ংক্রিয় সহকারী। কীভাবে সাহায্য করতে পারি?', menu: { book: 'অ্যাপয়েন্টমেন্ট বুক করুন', fee: 'দাম', quiz: 'কোন ডাক্তার দরকার?', loc: 'ঠিকানা ও সময়', ins: 'ইন্সুরেন্স', urgent: 'জরুরি সমস্যা', staff: 'স্টাফের সাথে কথা বলুন' },
       fee: 'নমুনা দাম:\n• সাধারণ পরামর্শ: ১০০–২০০ রিয়াল\n• শিশু: ১২০–২২০ রিয়াল\n• ল্যাব টেস্ট: ৫০–৩০০ রিয়াল\n• এক্স-রে: ১০০–২৫০ রিয়াল\n• সাধারণ চেকআপ: ২৫০–৪৫০ রিয়াল\n\nচূড়ান্ত দাম রিসেপশন নিশ্চিত করবে।', loc: 'নমুনা এলাকা, মদিনা।\nশনিবার থেকে বৃহস্পতিবার, সকাল ৯টা–দুপুর ১টা ও বিকাল ৪টা–রাত ১০টা।\nআসল সংস্করণে এই মেসেজের সাথে ম্যাপ পিন যাবে।', handover: 'সঠিক উত্তরের জন্য আপনাকে ক্লিনিকের টিমের সাথে যুক্ত করছি। তাঁরা এখানেই উত্তর দেবেন।', medical: 'আমি চিকিৎসা পরামর্শ দিতে বা ওষুধের কথা বলতে পারি না। আপনাকে টিমের সাথে যুক্ত করছি, ডাক্তার দেখানোর জন্য বুকও করতে পারেন।', emergency: 'এটি জরুরি হতে পারে।\nএখনই ৯৯৭ নম্বরে কল করুন অথবা নিকটস্থ জরুরি বিভাগে যান। অ্যাপয়েন্টমেন্টের জন্য অপেক্ষা করবেন না।\n\nআমি ক্লিনিকের টিমকেও জানিয়েছি।', staffHello: 'ওয়ালাইকুম আসসালাম, আমি রিসেপশন থেকে বলছি। আমি এখন আপনাকে সাহায্য করছি।', unknown: 'দুঃখিত, ঠিক বুঝতে পারিনি। মেনু থেকে বেছে নিন অথবা স্টাফের সাথে কথা বলুন।',
       chooseT: 'কোন বিভাগের জন্য বুক করতে চান?', treat: ['জেনারেল মেডিসিন', 'শিশু চিকিৎসা', 'গাইনি', 'হৃদরোগ', 'অর্থোপেডিক্স', 'চর্মরোগ', 'নাক-কান-গলা', 'রক্ত পরীক্ষা'], chooseSlot: (t, d) => `${t}\n${d}\n\nকোন সময়ে আসতে চান?`, slots: ['সকাল ৯:৩০', 'সকাল ১১:০০', 'বিকাল ৪:৩০', 'সন্ধ্যা ৭:০০'], consent: 'আপনার নাম ও নম্বর শুধু অ্যাপয়েন্টমেন্ট পরিচালনায় ব্যবহার হবে। হোয়াটসঅ্যাপে রিমাইন্ডার পেতে সম্মত আছেন?', yes: 'হ্যাঁ, সম্মত', no: 'রিমাইন্ডার চাই না', booked: (t, d, s) => `আপনার অ্যাপয়েন্টমেন্ট বুক হয়েছে।\n${t}\n${d}, ${s}`, remindOn: 'ভিজিটের আগের দিন রিমাইন্ডার পাবেন।', remindOff: 'আপনাকে রিমাইন্ডার পাঠানো হবে না।', remindStarter: 'প্রয়োজন হলে রিসেপশন আপনার ভিজিট নিশ্চিত করবে।',
@@ -384,39 +374,9 @@
       langsQ: 'আপনি ইংরেজি, আরবি বা বাংলায় লিখতে পারেন, এবং যেকোনো সময় ভাষা বদলাতে পারেন। একটি বেছে নিন:',
       otherLangR: 'Please write the language you speak. A team member will help you.\n\nيرجى كتابة اللغة التي تتحدثها، وسيساعدك أحد الموظفين.',
       say: { fee: 'ফি কত?', location: 'ক্লিনিকটা কোথায়?', insurance: 'ইন্সুরেন্স চলে?', book: 'আমি ভিজিট বুক করতে চাই', quiz: 'আমার কোন ডাক্তার দরকার?', medical: 'জ্বরের জন্য কী ওষুধ খাব?', emergency: 'আমার বুকে ব্যথা হচ্ছে', urgent: 'আমার খুব জ্বর', employer: 'আমাদের কর্মীদের চেকআপ দরকার' },
-      ex: { pick: 'রোগী প্রথমেই নিজের ভাষা বেছে নেন, তারপর পুরো চ্যাট সেই ভাষায় চলে। সেটআপের সময় উর্দু বা হিন্দির মতো আরও ভাষা যোগ করা যায়।', otherLang: 'যে ভাষা সহকারী এখনো জানে না, সেটি সেই ভাষা জানা স্টাফের কাছে যায়, এবং সেটআপে যোগ করা যায়।', symptom: 'রোগী নিজের কথায় সমস্যা বলেন। সহকারী রোগনির্ণয় বা ওষুধ ছাড়াই বিভাগ দেখায়, এবং ৯৯৭-এর সতর্কতা দেয়।', notHere: 'ক্লিনিকে বিভাগটি না থাকলে সহকারী অনুমান করে না, রিসেপশনে পাঠায়।', records: 'রিপোর্ট ও প্রেসক্রিপশন ব্যক্তিগত, তাই সহকারী সরাসরি স্টাফের কাছে পাঠায়।', manage: 'রোগী শুধু বললেই বুকিং বদলাতে বা বাতিল করতে পারেন।', smalltalk: 'সহকারী ধন্যবাদ ও বিদায়ের স্বাভাবিক উত্তর দেয়, এবং জিজ্ঞেস করলে জানায় এটি স্বয়ংক্রিয়।', start: 'রোগী যেকোনো জায়গা থেকে শুরু করে তাৎক্ষণিক উত্তর পান। এই প্যাকেজ দেখতে একটি উদাহরণ বেছে নিন।', fee: 'রোগী ক্লিনিকের অনুমোদিত দাম পান। সহকারী অন্য দাম অনুমান করে না।', location: 'বারবার আসা প্রশ্নের উত্তর সাথে সাথে, রিসেপশনকে ব্যস্ত না করে।', insurance: 'সহকারী ইন্সুরেন্স নিয়ে অনুমান করে না। স্টাফের কাছে কারণসহ পাঠায়।', book: 'কয়েক ট্যাপে প্রশ্ন থেকে টোকেনসহ ভিজিট।', booked: 'বুকিং ও টোকেন সাথে সাথে ক্লিনিকের দিকে দেখা যায়।', quiz: 'রোগ নির্ণয় না করে সহকারী রোগীকে সঠিক বিভাগ দেখায়।', medical: 'সহকারী নিজের সীমা জানে: চিকিৎসা পরামর্শ বা ওষুধ নয়, স্টাফের কাছে পাঠানো।', emergency: 'বিপজ্জনক উপসর্গ আগে দেখা হয়। রোগীকে ৯৯৭-এ পাঠানো হয় এবং স্টাফকে জানানো হয়।', staff: 'স্টাফ যেকোনো সময় একই চ্যাটে যোগ দিতে পারেন।', review: 'প্রত্যেক রোগী রিভিউ অনুরোধ পান, অভিযোগের জন্য আলাদা পথ আছে।', reminder: 'রিমাইন্ডারে চিকিৎসা-সংক্রান্ত বিবরণ থাকে না। বাতিল হলে স্লট আবার পূরণ করা যায়।', queue: 'টোকেন ও আসার সময় ব্যস্ত দিনের ভিড় কমাতে সাহায্য করে।', recall: 'ফোন ছাড়াই রোগীরা ফলো-আপে ফেরেন, এক ট্যাপে মেসেজ বন্ধ করা যায়।', results: 'রোগী জানতে পারেন ফলাফল প্রস্তুত, মেসেজে কোনো চিকিৎসা-সংক্রান্ত বিবরণ থাকে না।', aftercare: 'ডাক্তারের অনুমোদিত নির্দেশনা ফোন কমায়, অবনতি হলে সাথে সাথে স্টাফ জানতে পারেন।', urgent: 'অগ্রাধিকার অনুযায়ী একই দিনে বুক হয়। বিপজ্জনক ক্ষেত্রে ৯৯৭-এ পাঠানো হয়।', followup: 'গোপনীয়তার জন্য মেসেজে টেস্টের নাম থাকে না।', form: 'রোগী আসার আগেই তথ্য ফাইলে পৌঁছে যায়। আসল সংস্করণে চ্যাটের বাইরে নিরাপদ ফর্ম ব্যবহার হয়।', employer: 'কোম্পানির অনুরোধ বিস্তারিতসহ সরাসরি সমন্বয়কারীর কাছে যায়।', handover: 'মানুষের দরকার হলে রোগী কারণসহ স্টাফ তালিকায় যুক্ত হন।', unknown: 'সহকারী নিশ্চিত না হলে সেটি বলে এবং স্টাফের সাথে কথা বলার সুযোগ দেয়।' }
+      ex: { pick: 'রোগী প্রথমেই নিজের ভাষা বেছে নেন, তারপর পুরো চ্যাট সেই ভাষায় চলে। সেটআপের সময় উর্দু বা হিন্দির মতো আরও ভাষা যোগ করা যায়।', otherLang: 'যে ভাষা সহকারী এখনো জানে না, সেটি সেই ভাষা জানা স্টাফের কাছে যায়, এবং সেটআপে যোগ করা যায়।', symptom: 'রোগী নিজের কথায় সমস্যা বলেন। সহকারী রোগনির্ণয় বা ওষুধ ছাড়াই বিভাগ দেখায়, এবং ৯৯৭-এর সতর্কতা দেয়।', notHere: 'ক্লিনিকে বিভাগটি না থাকলে সহকারী অনুমান করে না, রিসেপশনে পাঠায়।', records: 'রিপোর্ট ও প্রেসক্রিপশন ব্যক্তিগত, তাই সহকারী সরাসরি স্টাফের কাছে পাঠায়।', manage: 'রোগী শুধু বললেই বুকিং বদলাতে বা বাতিল করতে পারেন।', smalltalk: 'সহকারী ধন্যবাদ ও বিদায়ের স্বাভাবিক উত্তর দেয়, এবং জিজ্ঞেস করলে জানায় এটি স্বয়ংক্রিয়।', start: 'রোগী ভাষা বেছে নিয়ে সাথে সাথে উত্তর পান। একটি উদাহরণ বেছে নিন, অথবা নিজের প্রশ্ন লিখুন।', fee: 'রোগী ক্লিনিকের অনুমোদিত দাম পান। সহকারী অন্য দাম অনুমান করে না।', location: 'বারবার আসা প্রশ্নের উত্তর সাথে সাথে, রিসেপশনকে ব্যস্ত না করে।', insurance: 'সহকারী ইন্সুরেন্স নিয়ে অনুমান করে না। স্টাফের কাছে কারণসহ পাঠায়।', book: 'কয়েক ট্যাপে প্রশ্ন থেকে টোকেনসহ ভিজিট।', booked: 'বুকিং ও টোকেন সাথে সাথে ক্লিনিকের বুকিং প্ল্যাটফর্মে যায়, যেখানে স্টাফ দেখেন।', quiz: 'রোগ নির্ণয় না করে সহকারী রোগীকে সঠিক বিভাগ দেখায়।', medical: 'সহকারী নিজের সীমা জানে: চিকিৎসা পরামর্শ বা ওষুধ নয়, স্টাফের কাছে পাঠানো।', emergency: 'বিপজ্জনক উপসর্গ আগে দেখা হয়। রোগীকে ৯৯৭-এ পাঠানো হয় এবং স্টাফকে জানানো হয়।', staff: 'স্টাফ যেকোনো সময় একই চ্যাটে যোগ দিতে পারেন।', review: 'প্রত্যেক রোগী রিভিউ অনুরোধ পান, অভিযোগের জন্য আলাদা পথ আছে।', reminder: 'রিমাইন্ডারে চিকিৎসা-সংক্রান্ত বিবরণ থাকে না। বাতিল হলে স্লট আবার পূরণ করা যায়।', queue: 'টোকেন ও আসার সময় ব্যস্ত দিনের ভিড় কমাতে সাহায্য করে।', recall: 'ফোন ছাড়াই রোগীরা ফলো-আপে ফেরেন, এক ট্যাপে মেসেজ বন্ধ করা যায়।', results: 'রোগী জানতে পারেন ফলাফল প্রস্তুত, মেসেজে কোনো চিকিৎসা-সংক্রান্ত বিবরণ থাকে না।', aftercare: 'ডাক্তারের অনুমোদিত নির্দেশনা ফোন কমায়, অবনতি হলে সাথে সাথে স্টাফ জানতে পারেন।', urgent: 'অগ্রাধিকার অনুযায়ী একই দিনে বুক হয়। বিপজ্জনক ক্ষেত্রে ৯৯৭-এ পাঠানো হয়।', followup: 'গোপনীয়তার জন্য মেসেজে টেস্টের নাম থাকে না।', form: 'রোগী আসার আগেই তথ্য ফাইলে পৌঁছে যায়। আসল সংস্করণে চ্যাটের বাইরে নিরাপদ ফর্ম ব্যবহার হয়।', employer: 'কোম্পানির অনুরোধ বিস্তারিতসহ সরাসরি সমন্বয়কারীর কাছে যায়।', handover: 'মানুষের দরকার হলে রোগী কারণসহ স্টাফ তালিকায় যুক্ত হন।', unknown: 'সহকারী নিশ্চিত না হলে সেটি বলে এবং স্টাফের সাথে কথা বলার সুযোগ দেয়।' }
     }
   };
-
-  const TIERS = [
-    { ar: { n: 'الأساسية', s: 'رد فوري وحجوزات جديدة', h: 'رد فوري وحجوزات جديدة من اليوم الأول', b: 'العيادات التي تبدأ حضورها الرقمي أو تفقد استفسارات واتساب', p: 'رسوم تأسيس + اشتراك شهري' }, en: { n: 'Starter', s: 'Instant replies, new bookings', h: 'Instant replies and new bookings from day one', b: 'Clinics starting out online, or losing WhatsApp enquiries', p: 'Setup fee + monthly plan' }, bn: { n: 'স্টার্টার', s: 'তাৎক্ষণিক উত্তর, নতুন বুকিং', h: 'প্রথম দিন থেকেই তাৎক্ষণিক উত্তর ও নতুন বুকিং', b: 'যে ক্লিনিক অনলাইনে শুরু করছে বা হোয়াটসঅ্যাপ প্রশ্ন হারাচ্ছে', p: 'সেটআপ ফি + মাসিক প্ল্যান' } },
-    { popular: true, ar: { n: 'النمو', s: 'مواعيد ممتلئة ومرضى يعودون', h: 'أقل تغيّب عن المواعيد، ومرضى يعودون تلقائياً', b: 'العيادات التي لديها مرضى سابقون وأيام مزدحمة', p: 'رسوم تأسيس + اشتراك شهري أعلى' }, en: { n: 'Growth', s: 'Fuller schedules, returning patients', h: 'Fewer no-shows, and patients who come back automatically', b: 'Clinics with past patients and crowded days', p: 'Setup fee + higher monthly plan' }, bn: { n: 'গ্রোথ', s: 'পূর্ণ সময়সূচি, ফিরে আসা রোগী', h: 'কম অনুপস্থিতি, রোগীরা নিজে থেকেই ফেরেন', b: 'যে ক্লিনিকে পুরনো রোগী ও ব্যস্ত দিন আছে', p: 'সেটআপ ফি + বেশি মাসিক প্ল্যান' } },
-    { ar: { n: 'المجمع المتكامل', s: 'إدارة كل شيء من مكان واحد', h: 'تابع الفحوصات والتحويلات، وأدر كل شيء من شاشة واحدة', b: 'المجمعات متعددة الأقسام والعيادات التي تخدم الشركات', p: 'رسوم تأسيس + اشتراك شهري متميز' }, en: { n: 'Full Clinic', s: 'Run it all from one place', h: 'Follow up tests and referrals, and run it all from one screen', b: 'Multi-department clinics and those serving employers', p: 'Setup fee + premium monthly plan' }, bn: { n: 'ফুল ক্লিনিক', s: 'সবকিছু এক জায়গা থেকে', h: 'টেস্ট ও রেফারেল ফলো-আপ, সব এক স্ক্রিন থেকে', b: 'বহু-বিভাগের ক্লিনিক ও যারা কোম্পানিকে সেবা দেয়', p: 'সেটআপ ফি + প্রিমিয়াম মাসিক প্ল্যান' } }
-  ];
-
-  // [tier, {language: [title, line]}]
-  const FEATURES = [
-    [1, { ar: ['موقع بثلاث لغات', 'الإنجليزية والعربية والبنغالية'], en: ['Three-language website', 'English, Arabic and Bengali'], bn: ['তিন ভাষার ওয়েবসাইট', 'ইংরেজি, আরবি ও বাংলা'] }],
-    [1, { ar: ['مساعد واتساب على مدار الساعة', 'يجيب عن الأسعار والموقع والساعات'], en: ['24/7 WhatsApp assistant', 'Answers on prices, location and hours'], bn: ['২৪/৭ হোয়াটসঅ্যাপ সহকারী', 'দাম, ঠিকানা ও সময়ের উত্তর'] }],
-    [1, { ar: ['الحجز عبر واتساب', 'موعد بضغطات قليلة'], en: ['WhatsApp booking', 'A visit booked in a few taps'], bn: ['হোয়াটসঅ্যাপ বুকিং', 'কয়েক ট্যাপে ভিজিট বুক'] }],
-    [1, { ar: ['أرقام الدور', 'رقم ووقت حضور لكل مريض'], en: ['Booking tokens', 'A number and time for each patient'], bn: ['বুকিং টোকেন', 'প্রত্যেক রোগীর নম্বর ও সময়'] }],
-    [1, { ar: ['أي طبيب أحتاج؟', 'يرشد المريض إلى القسم المناسب'], en: ['Which doctor do I need?', 'Points patients to the right department'], bn: ['কোন ডাক্তার দরকার?', 'রোগীকে সঠিক বিভাগ দেখায়'] }],
-    [1, { ar: ['طلب تقييمات Google', 'يصل إلى المريض بعد زيارته'], en: ['Google review requests', 'Sent to patients after a visit'], bn: ['গুগল রিভিউ অনুরোধ', 'ভিজিটের পর রোগীকে পাঠানো হয়'] }],
-    [1, { ar: ['تحويل آمن إلى الفريق', 'لا نصائح طبية، والطوارئ إلى 997'], en: ['Safe handover to staff', 'No medical advice, emergencies sent to 997'], bn: ['স্টাফের কাছে নিরাপদ হস্তান্তর', 'চিকিৎসা পরামর্শ নয়, জরুরি হলে ৯৯৭'] }],
-    [2, { ar: ['تذكير المواعيد', 'تأكيد أو تغيير أو إلغاء'], en: ['Visit reminders', 'Confirm, change or cancel'], bn: ['ভিজিটের রিমাইন্ডার', 'নিশ্চিত, পরিবর্তন বা বাতিল'] }],
-    [2, { ar: ['قائمة انتظار تلقائية', 'يُعرض الموعد الملغى على مريض آخر'], en: ['Automatic waiting list', 'Cancelled slots go to the next patient'], bn: ['স্বয়ংক্রিয় অপেক্ষার তালিকা', 'বাতিল স্লট পরের রোগীকে দেওয়া হয়'] }],
-    [2, { ar: ['تنظيم الأيام المزدحمة', 'مواعيد محددة وأرقام دور'], en: ['Busy-day slots and queue', 'Set times and token numbers'], bn: ['ব্যস্ত দিনের স্লট ও সিরিয়াল', 'নির্দিষ্ট সময় ও টোকেন'] }],
-    [2, { ar: ['تذكير الفحص واللقاح', 'يعيد المرضى في الوقت المناسب'], en: ['Check-up and vaccine recall', 'Brings patients back on time'], bn: ['চেকআপ ও টিকার রিমাইন্ডার', 'সময়মতো রোগীদের ফিরিয়ে আনে'] }],
-    [2, { ar: ['إشعار جاهزية النتائج', 'دون أي تفاصيل طبية'], en: ['Lab results ready notices', 'With no medical details'], bn: ['ফলাফল প্রস্তুতের বার্তা', 'চিকিৎসা-সংক্রান্ত বিবরণ ছাড়া'] }],
-    [2, { ar: ['تعليمات ما بعد الزيارة', 'تعليمات ومتابعة في اليوم التالي'], en: ['After-visit instructions', 'And a next-day check-in'], bn: ['ভিজিটের পরের নির্দেশনা', 'পরের দিন খোঁজখবর'] }],
-    [2, { ar: ['مسار الحالات العاجلة', 'مواعيد في اليوم نفسه حسب الأولوية'], en: ['Same-day urgent flow', 'Same-day visits by priority'], bn: ['একই দিনের জরুরি ব্যবস্থা', 'অগ্রাধিকার অনুযায়ী একই দিনে ভিজিট'] }],
-    [3, { ar: ['متابعة الفحوصات والتحويلات', 'لمن طُلب منه فحص ولم يحجز'], en: ['Test and referral follow-up', 'For patients who haven’t booked'], bn: ['টেস্ট ও রেফারেল ফলো-আপ', 'যাঁরা এখনো বুক করেননি'] }],
-    [3, { ar: ['النموذج الصحي قبل الزيارة', 'البيانات في الملف قبل حضور المريض'], en: ['Pre-visit patient form', 'Details on file before arrival'], bn: ['ভিজিটের আগের ফর্ম', 'আসার আগেই তথ্য ফাইলে'] }],
-    [3, { ar: ['لوحة الفريق', 'المواعيد والمحادثات والطلبات معاً'], en: ['Staff dashboard', 'Bookings, chats and leads together'], bn: ['স্টাফ ড্যাশবোর্ড', 'বুকিং, চ্যাট ও অনুরোধ একসাথে'] }],
-    [3, { ar: ['تتبع الحملات', 'مصدر كل مريض من المنشورات والإعلانات'], en: ['Campaign tracking', 'See which flyers and ads bring patients'], bn: ['প্রচারণা ট্র্যাকিং', 'কোন ফ্লায়ার ও বিজ্ঞাপনে রোগী আসছে'] }],
-    [3, { ar: ['طلبات الشركات والمجموعات', 'فحوصات للموظفين عبر المنسق'], en: ['Employer and group enquiries', 'Staff check-ups through a coordinator'], bn: ['কোম্পানি ও গ্রুপ অনুরোধ', 'সমন্বয়কারীর মাধ্যমে কর্মীদের চেকআপ'] }],
-    [3, { ar: ['تقرير شهري لصاحب المجمع', 'المرضى الجدد والإيراد الإضافي'], en: ['Monthly owner report', 'New patients and added revenue'], bn: ['মালিকের মাসিক রিপোর্ট', 'নতুন রোগী ও অতিরিক্ত আয়'] }]
-  ];
 
   const SCEN = [
     ['book', 1], ['fee', 1], ['location', 1], ['insurance', 1], ['quiz', 1], ['review', 1], ['medical', 1], ['emergency', 1],
@@ -506,9 +466,11 @@
   const log = $('log');
 
   let lang = document.documentElement.lang;
-  let tier = /^#tier[123]$/.test(location.hash) ? Number(location.hash.slice(5)) : 2;
+  // Every example chat is available; there are no packages in this demo.
+  let tier = 3;
+  const HIDE = ['results', 'followup', 'form'];
   let session = 0, chain = Promise.resolve();
-  let m, queue, feed, schedule, lastBooking, token;
+  let m, queue, feed, schedule, lastBooking, token, booked;
   const STALE = Symbol('stale');
   let chatLang = null;
   const t = () => T[lang];
@@ -521,7 +483,7 @@
 
   function freshData() {
     m = { chats: 64, bookings: 18, quiz: 11, reviews: 9, reminders: 142, confirmed: 118, slots: 9, recalls: 210, returned: 37, quoted: 23, followed: 15, booked: 6, newp: 41, noshow: 4200, recall: 9250, follow: 12800 };
-    queue = []; feed = []; schedule = SAMPLE_SCHED(); lastBooking = null; token = 42;
+    queue = []; feed = []; schedule = SAMPLE_SCHED(); lastBooking = null; token = 42; booked = [];
   }
 
   /* ---- chat engine ---- */
@@ -648,6 +610,7 @@
       const code = 'A-' + token;
       await bot(x.booked(name, x.today, slot), { ticket: code });
       lastBooking = { name, slot, ok };
+      booked.unshift({ name, when: `${x.today}, ${slot}`, code });
       m.bookings++; m.chats++; m.newp++;
       schedule = [[slot, '1', x.newPatient, name, true], ...schedule];
       activity('booking');
@@ -715,7 +678,7 @@
       chips([
         [x.uC[0], async () => {
           await bot(x.uSlot);
-          chips(x.uSlots.map(s => [s, async () => { await bot(x.uBooked(s), { urgent: true }); schedule = [[s, '2', x.newPatient, x.uC[0], true], ...schedule]; addQueue('urgent', true); activity('urgent'); menu(); }]));
+          chips(x.uSlots.map(s => [s, async () => { await bot(x.uBooked(s), { urgent: true }); booked.unshift({ name: x.uC[0], when: s, code: '' }); schedule = [[s, '2', x.newPatient, x.uC[0], true], ...schedule]; addQueue('urgent', true); activity('urgent'); menu(); }]));
         }],
         [x.uC[1], async () => { await bot(x.uTooth, { urgent: true }); addQueue('urgent', true); menu(); }],
         [x.uC[2], async () => { await bot(x.uSwell, { urgent: true }); addQueue('urgent', true); menu(); }],
@@ -796,37 +759,16 @@
   }
 
   /* ---- rendering ---- */
-  function renderTier() {
-    const x = t(), cur = TIERS[tier - 1][lang];
-    $('tabs').replaceChildren(...TIERS.map((c, i) => {
-      const b = make('button', 'tab'); b.type = 'button';
-      b.setAttribute('role', 'tab'); b.setAttribute('aria-selected', String(i + 1 === tier));
-      if (c.popular) b.append(make('em', 'pop', x.popular));
-      b.append(make('b', '', c[lang].n), make('span', '', c[lang].s));
-      b.onclick = () => setTier(i + 1);
-      return b;
-    }));
-    const line = $('tierLine'); line.replaceChildren(make('b', '', cur.h + ' '), document.createTextNode(cur.b));
-  }
+  function renderTier() {}
 
   function renderScen() {
     const x = t(), box = $('scen'); box.replaceChildren();
-    const open = SCEN.filter(s => s[1] <= tier), locked = SCEN.filter(s => s[1] > tier);
     box.append(make('div', 'group', x.included));
-    open.forEach(([id]) => {
+    SCEN.filter(([id]) => !HIDE.includes(id)).forEach(([id]) => {
       const b = make('button', '', x.scen[id]); b.type = 'button'; b.dataset.s = id;
       b.onclick = () => runScenario(id);
       box.append(b);
     });
-    if (locked.length) {
-      box.append(make('div', 'group', x.lockedGroup));
-      locked.forEach(([id, lv]) => {
-        const b = make('button', 'locked'); b.type = 'button'; b.dataset.s = id;
-        b.append(make('span', '', x.scen[id]), make('span', 'lock', TIERS[lv - 1][lang].n));
-        b.onclick = () => { setTier(lv); runScenario(id); };
-        box.append(b);
-      });
-    }
   }
 
   const fmt = n => n.toLocaleString('en-US');
@@ -862,48 +804,13 @@
     } else q.append(make('p', 'empty', x.queueEmpty));
     out.push(q);
 
-    if (tier === 3) {
-      const s = panel(x.schedPanel, null, true);
-      const wrap = make('div', 'tscroll'), tb = make('table', 'sched');
-      const hr = make('tr'); x.th.forEach(h => hr.append(make('th', '', h)));
-      tb.append(hr);
-      [...schedule].slice(0, 6).forEach(r => {
-        const tr = make('tr', r[4] ? 'new' : '');
-        const c0 = make('td', 't', r[0]); tr.append(c0, make('td', '', r[1]), make('td', '', r[2]), make('td', '', r[3]));
-        tb.append(tr);
-      });
-      wrap.append(tb); s.append(wrap); out.push(s);
-
-      const pipe = panel(x.pipePanel, null, true), bars = make('div', 'bars');
-      [['quoted', m.quoted], ['followed', m.followed], ['booked', m.booked]].forEach(([k, v]) => {
-        const w = make('div'), row = make('div', 'row');
-        row.append(make('span', '', x.p[k]), make('b', '', fmt(v)));
-        const tr = make('div', 'track'), fill = make('div', 'fill');
-        fill.style.width = (v / m.quoted * 100) + '%';
-        tr.append(fill); w.append(row, tr); bars.append(w);
-      });
-      pipe.append(bars); out.push(pipe);
-
-      const rep = panel(x.reportPanel, null, true), rb = make('div', 'bars');
-      const money = n => `${fmt(n)} ${x.sar}`;
-      const nr = make('div', 'row'); nr.append(make('span', '', x.r.newp), make('b', '', fmt(m.newp))); rb.append(nr);
-      ['noshow', 'recall', 'follow'].forEach(k => { const r = make('div', 'row'); r.append(make('span', '', x.r[k]), make('b', '', money(m[k]))); rb.append(r); });
-      rep.append(rb);
-      const tot = make('div', 'total'); tot.append(make('span', '', x.r.total), make('b', '', money(m.noshow + m.recall + m.follow)));
-      rep.append(tot); out.push(rep);
-
-      const camp = panel(x.campPanel, null, true), cb = make('div', 'bars');
-      [86, 64, 31].forEach((v, i) => {
-        const w = make('div'), row = make('div', 'row');
-        row.append(make('span', '', x.camp[i]), make('b', '', fmt(v)));
-        const tr = make('div', 'track'), fill = make('div', 'fill');
-        fill.style.width = (v / 86 * 100) + '%';
-        tr.append(fill); w.append(row, tr); cb.append(w);
-      });
-      camp.append(cb); out.push(camp);
-    }
-    if (tier >= 2) { const a = panel(x.autoPanel, null, true); a.append(statsGrid(['reminders', 'confirmed', 'slots', 'recalls', 'returned'])); out.push(a); }
-    if (tier === 1 || tier === 2) { const a = panel(x.startPanel, null, true); a.append(statsGrid(['chats', 'bookings', 'quiz', 'reviews'])); out.push(a); }
+    const bp = panel(x.bookingsPanel, null, true);
+    if (booked.length) {
+      const ul = make('ul', 'booked-list');
+      booked.slice(0, 4).forEach(b => { const li = make('li'); li.append(make('b', '', b.name), document.createTextNode(b.when + (b.code ? ` · ${b.code}` : ''))); ul.append(li); });
+      bp.append(ul);
+    } else bp.append(make('p', 'empty', x.noBookings));
+    out.push(bp);
     const f = panel(x.activity);
     if (feed.length) { const ul = make('ul', 'feed'); feed.forEach(i => ul.append(make('li', '', i))); f.append(ul); }
     else f.append(make('p', 'empty', '—'));
@@ -911,40 +818,7 @@
     box.replaceChildren(...out);
   }
 
-  function renderCompare() {
-    const x = t(), tb = make('table', 'cmp');
-    const cg = make('colgroup'); cg.append(make('col', 'feat'), make('col'), make('col'), make('col')); tb.append(cg);
-    const thead = make('thead'), hr = make('tr');
-    hr.append(make('th', '', x.feature));
-    TIERS.forEach((c, i) => {
-      const th = make('th', i + 1 === tier ? 'cur' : ''); th.scope = 'col';
-      th.append(make('b', '', c[lang].n));
-      const btn = make('button', '', i + 1 === tier ? x.selected : x.tryIt); btn.type = 'button';
-      btn.setAttribute('aria-pressed', String(i + 1 === tier));
-      btn.onclick = () => { setTier(i + 1); document.querySelector('.phone-col').scrollIntoView({ behavior: reduced ? 'auto' : 'smooth' }); };
-      th.append(btn); hr.append(th);
-    });
-    thead.append(hr); tb.append(thead);
-    const body = make('tbody');
-    [1, 2, 3].forEach(level => {
-      const g = make('tr', 'grp'), gh = make('th', '', x.groupTitle(TIERS[level - 1][lang].n)); gh.scope = 'rowgroup';
-      g.append(gh); [1, 2, 3].forEach(i => g.append(make('td', i === tier ? 'cur' : ''))); body.append(g);
-      FEATURES.filter(f => f[0] === level).forEach(f => {
-        const tr = make('tr'), th = make('th'); th.scope = 'row';
-        th.append(make('b', '', f[1][lang][0]), make('small', '', f[1][lang][1])); tr.append(th);
-        [1, 2, 3].forEach(i => {
-          const yes = f[0] <= i, td = make('td', i === tier ? 'cur' : '');
-          const m = make('span', yes ? 'y' : 'n', yes ? '\u2713' : '\u2014');
-          m.setAttribute('aria-label', yes ? 'yes' : 'no');
-          td.append(m); tr.append(td);
-        });
-        body.append(tr);
-      });
-    });
-    tb.append(body);
-    $('compareTable').replaceChildren(tb);
-    $('compareFoot').textContent = TIERS.map(c => `${c[lang].n}: ${c[lang].p}`).join(' \u00b7 ');
-  }
+  function renderCompare() {}
 
   function renderStatic() {
     const x = t();
@@ -955,7 +829,7 @@
     $('scenTitle').textContent = x.scenTitle; $('scenHint').textContent = x.scenHint; $('reset').textContent = x.reset;
     $('explainTitle').textContent = x.explainTitle; $('clinicName').textContent = x.clinic; $('clinicStatus').textContent = x.status;
     $('send').textContent = x.send; $('input').placeholder = x.placeholder; $('input').setAttribute('aria-label', x.placeholder);
-    $('compareTitle').textContent = x.compare; $('compareLead').textContent = x.cmpLead; $('pkgLabel').textContent = x.pkgLabel; $('seeCompare').textContent = x.seeCompare; $('clinicSide').textContent = x.clinicSide;
+    $('clinicSide').textContent = x.clinicSide; $('clinicNote').textContent = x.clinicNote;
     document.querySelectorAll('.langs button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
   }
 

@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Metanor Clinic Suite: a WhatsApp assistant and website for clinics</title>
-<meta name="description" content="Metanor Clinic Suite answers your patients on WhatsApp in their own language, books visits with a token number and hands anything medical to your staff. Every package includes a clinic website.">
+<title>Metanor Clinic Suite: clinic websites, booking setup and WhatsApp</title>
+<meta name="description" content="Metanor builds your clinic’s website, connects it to a trusted booking platform and WhatsApp, and trains your staff. The website and setup are free.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Metanor Clinic Suite">
-<meta property="og:description" content="A WhatsApp assistant for clinics, with a clinic website in every package.">
+<meta property="og:description" content="Clinic websites in your patients’ languages, connected to a trusted booking platform and WhatsApp. The website and setup are free.">
 <meta property="og:image" content="share.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
@@ -49,7 +49,8 @@ html:is([lang="ar"], [lang="bn"]) :is(h1, h2, .mo-wh__text) { line-height: 1.35;
 <link rel="stylesheet" href="assets/landing.css">
 </head>
 <body>
-<!-- type: software (Metanor sells clinic software: Metanor Clinic Suite, a WhatsApp assistant with a clinic website in every package)
+<!-- type: software (Metanor Clinic Suite: Metanor builds the clinic website, connects a licensed booking platform and WhatsApp, and trains staff;
+     bookings and patient records live on the booking platform, never with Metanor)
      deal: hero split (the patient's phone), nav nav-centre, close close-word (the logo lockup), footer footer-dark,
      rhythm surface-pairs, buttons solid, palette: the client's green (start.mjs brand), type funnel; Arabic: IBM Plex Sans Arabic; Bengali: Hind Siliguri
      moment: word-highlight (#languages statement). Sections are content height (the client asked for no screen-tall gaps).
@@ -71,9 +72,9 @@ html:is([lang="ar"], [lang="bn"]) :is(h1, h2, .mo-wh__text) { line-height: 1.35;
     <a class="skip-link" href="#top" data-i18n="skip">Skip to content</a>
     <a class="nav__logo lockup" href="#top" aria-label="Metanor Clinic Suite"><img src="assets/metanor-logo-green.svg" alt="Metanor" width="514" height="96"><span class="lockup__suite">Clinic Suite</span></a>
     <nav class="nav__links" aria-label="Main">
+      <div class="nav__item"><a class="nav__link" href="#demos" data-i18n="navDemos">Demos</a></div>
       <div class="nav__item"><a class="nav__link" href="#how" data-i18n="navHow">How it works</a></div>
-      <div class="nav__item"><a class="nav__link" href="#packages" data-i18n="navPackages">Packages</a></div>
-      <div class="nav__item"><a class="nav__link" href="#website" data-i18n="navWebsite">Website</a></div>
+      <div class="nav__item"><a class="nav__link" href="#setup" data-i18n="navSetup">What we do</a></div>
       <div class="nav__item"><a class="nav__link" href="#questions" data-i18n="navQuestions">Questions</a></div>
     </nav>
     <div class="nav__actions">
@@ -94,8 +95,8 @@ html:is([lang="ar"], [lang="bn"]) :is(h1, h2, .mo-wh__text) { line-height: 1.35;
     <div class="wrap"><div class="hero-text grid hero__grid">
       <div class="hero__text span-6">
         <p class="hero__kicker"><span class="dot" aria-hidden="true"></span><span data-i18n="kicker">Metanor Clinic Suite</span></p>
-        <h1 id="hero-h" data-i18n="h1">The WhatsApp assistant that answers your patients, day and night</h1>
-        <p class="hero__lead" data-i18n="lead">It replies in seconds, books visits with a token number and passes anything medical to your staff, in the same chat. Every package also includes a website for your clinic.</p>
+        <h1 id="hero-h" data-i18n="h1">Your clinic online and on WhatsApp, in your patients’ languages</h1>
+        <p class="hero__lead" data-i18n="lead">We build your clinic’s website, connect it to a trusted booking platform and WhatsApp, and train your staff. The website and setup are free.</p>
         <div class="btn-row">
           <a class="btn btn--primary" href="#contact" data-inquiry="setup"><span data-i18n="ctaSetup">Request a setup</span><svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a>
           <a class="btn btn--secondary" href="demos/whatsapp-assistant/" data-i18n="ctaDemo">Try the WhatsApp demo</a>
@@ -123,51 +124,108 @@ html:is([lang="ar"], [lang="bn"]) :is(h1, h2, .mo-wh__text) { line-height: 1.35;
     </div></div>
   </section>
 
-  <section class="section auto" id="how" aria-labelledby="how-h">
+  <section class="section auto" id="demos" aria-labelledby="demos-h">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="t-label" data-i18n="demoEye">Two demos</p>
+        <h2 id="demos-h" data-i18n="demoH">See what your patients would see</h2>
+        <p data-i18n="demoP">Both demos run on a sample clinic with made-up data, so you can click through everything.</p>
+      </div>
+      <div class="demo-cards">
+        <article class="demo-card">
+          <a class="demo-card__shot demo-card__shot--phone" href="demos/whatsapp-assistant/" tabindex="-1" aria-hidden="true"><img src="assets/shots/whatsapp-demo.jpg" width="370" height="580" alt="" loading="lazy"></a>
+          <div class="demo-card__body">
+            <h3 data-i18n="dWaH">WhatsApp patient chat</h3>
+            <p data-i18n="dWaP">A demo of the patient experience: language choice, answers, booking and handover to staff. In a live rollout, this usually comes from your booking platform.</p>
+            <ul class="ticks">
+              <li data-i18n="dWa1">Asks the patient’s language first</li>
+              <li data-i18n="dWa2">Suggests a department, never gives medical advice</li>
+              <li data-i18n="dWa3">Hands anything medical to your staff</li>
+            </ul>
+            <p><a class="btn btn--primary" href="demos/whatsapp-assistant/" data-i18n="ctaDemo">Try the WhatsApp demo</a></p>
+          </div>
+        </article>
+        <article class="demo-card">
+          <a class="demo-card__shot" href="demos/clinic-website/" tabindex="-1" aria-hidden="true"><img src="assets/shots/clinic-website.jpg" width="1440" height="900" alt="" loading="lazy"></a>
+          <div class="demo-card__body">
+            <h3 data-i18n="dSiteH">Clinic website template</h3>
+            <p data-i18n="dSiteP">Your services, doctors, hours and price ranges, with buttons that lead patients to book. Patients choose their language the moment they arrive.</p>
+            <ul class="ticks">
+              <li data-i18n="dSite1">English, Arabic and Bengali</li>
+              <li data-i18n="dSite2">A “Which doctor do I need?” guide</li>
+              <li data-i18n="dSite3">Price ranges before patients book</li>
+            </ul>
+            <p><a class="btn btn--secondary" href="demos/clinic-website/" data-i18n="ctaSite">View the clinic website template</a></p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section auto ground-surface" id="how" aria-labelledby="how-h">
     <div class="wrap">
       <div class="section-head">
         <p class="t-label" data-i18n="howEye">How it works</p>
-        <h2 id="how-h" data-i18n="howH">One chat, from the patient’s first message to your front desk</h2>
-        <p data-i18n="howP">The assistant answers what it can. When a question needs a person, your staff pick it up in the Clinic Suite inbox and reply in the same WhatsApp chat.</p>
+        <h2 id="how-h" data-i18n="howH">Three steps from first meeting to live</h2>
+      </div>
+      <ol class="steps3">
+        <li><span class="steps3__n" aria-hidden="true">1</span><h3 data-i18n="st1h">We build your website</h3><p data-i18n="st1p">In your patients’ languages and your clinic’s branding.</p></li>
+        <li><span class="steps3__n" aria-hidden="true">2</span><h3 data-i18n="st2h">Bookings run on a trusted platform</h3><p data-i18n="st2p">Bookings and patient records run on a licensed booking platform that we help you choose.</p></li>
+        <li><span class="steps3__n" aria-hidden="true">3</span><h3 data-i18n="st3h">We connect it and train your staff</h3><p data-i18n="st3p">We connect the platform to your website and WhatsApp, and train your team to use it.</p></li>
+      </ol>
+      <p class="cost-line"><b data-i18n="costB">What it costs:</b> <span data-i18n="cost">The website and setup are free, as a community service. The booking platform and WhatsApp messages have small monthly fees that your clinic pays directly, roughly SAR 100–300 a month for a small clinic.</span></p>
+    </div>
+  </section>
+
+  <section class="section auto" id="chat" aria-labelledby="chat-h">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="t-label" data-i18n="chatEye">On WhatsApp</p>
+        <h2 id="chat-h" data-i18n="chatH">One chat, from the patient’s first message to your front desk</h2>
+        <p data-i18n="chatP">Routine questions get an instant answer. When a question needs a person, your staff pick it up and reply in the same WhatsApp chat.</p>
       </div>
       <div class="flow" id="flow">
         <div>
           <ol class="steps" id="steps">
             <li><button type="button" data-step="0"><b data-i18n="s1h">The patient writes on WhatsApp</b><span data-i18n="s1p">They choose their language, then ask in their own words.</span></button></li>
-            <li><button type="button" data-step="1"><b data-i18n="s2h">The assistant answers in seconds</b><span data-i18n="s2p">Prices, hours, directions and bookings, from details your clinic approves.</span></button></li>
-            <li><button type="button" data-step="2"><b data-i18n="s3h">It hands over what needs a person</b><span data-i18n="s3p">Insurance, medical questions and anything unclear go to your staff, with the reason shown.</span></button></li>
-            <li><button type="button" data-step="3"><b data-i18n="s4h">Your staff reply from Clinic Suite</b><span data-i18n="s4p">They answer from the staff inbox, and the patient sees it in the same chat.</span></button></li>
+            <li><button type="button" data-step="1"><b data-i18n="s2h">An instant answer</b><span data-i18n="s2p">Prices, hours, directions and bookings, from details your clinic approves.</span></button></li>
+            <li><button type="button" data-step="2"><b data-i18n="s3h">Handed over when it needs a person</b><span data-i18n="s3p">Insurance, medical questions and anything unclear go to your staff, with the reason shown.</span></button></li>
+            <li><button type="button" data-step="3"><b data-i18n="s4h">Your staff reply</b><span data-i18n="s4p">From your booking platform’s WhatsApp inbox. The patient sees it in the same chat.</span></button></li>
           </ol>
           <button class="flow__replay" type="button" id="replay"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M2.5 8a5.5 5.5 0 1 0 1.7-4"/><path d="M2.5 2.5v3h3"/></svg><span data-i18n="replay">Play again</span></button>
         </div>
-        <div class="stage2" id="stage2" data-view="phone">
-          <div class="stage2__tabs" role="group">
-            <button type="button" data-view="phone" aria-pressed="true" data-i18n="tabPhone">Patient’s WhatsApp</button>
-            <button type="button" data-view="staff" aria-pressed="false" data-i18n="tabStaff">Staff inbox</button>
-          </div>
-          <div class="mini">
-            <div class="screen">
-              <div class="screen__head">
-                <span class="screen__av" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M16 6h8v10h10v8H24v10h-8V24H6v-8h10z" fill="#0b5a3c"/></svg></span>
-                <span><span class="screen__name" data-i18n="clinicName">Sample Clinic</span><span class="screen__status" data-i18n="clinicStatus">Assistant · staff on hand</span></span>
-              </div>
-              <div class="screen__log" id="flowPhone" aria-live="polite"></div>
+        <div>
+          <div class="stage2" id="stage2" data-view="phone">
+            <div class="stage2__tabs" role="group">
+              <button type="button" data-view="phone" aria-pressed="true" data-i18n="tabPhone">Patient’s WhatsApp</button>
+              <button type="button" data-view="staff" aria-pressed="false" data-i18n="tabStaff">Staff inbox</button>
             </div>
-          </div>
-          <div class="console is-idle" id="console">
-            <div class="console__bar">
-              <span class="lockup" aria-hidden="true"><img src="assets/metanor-logo-green.svg" alt="" width="514" height="96"><span class="lockup__suite">Clinic Suite</span></span>
-              <span class="console__title" data-i18n="inbox">Staff inbox</span>
-            </div>
-            <div class="console__body">
-              <div class="console__list" id="flowList"></div>
-              <div class="console__thread">
-                <div class="thread__head" id="flowHead"></div>
-                <div class="thread__log" id="flowThread"></div>
-                <div class="thread__input"><span class="thread__field" id="flowField"></span><span class="thread__send" id="flowSend" data-i18n="send">Send</span></div>
+            <div class="mini">
+              <div class="screen">
+                <div class="screen__head">
+                  <span class="screen__av" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M16 6h8v10h10v8H24v10h-8V24H6v-8h10z" fill="#0b5a3c"/></svg></span>
+                  <span><span class="screen__name" data-i18n="clinicName">Sample Clinic</span><span class="screen__status" data-i18n="clinicStatus">Assistant · staff on hand</span></span>
+                </div>
+                <div class="screen__log" id="flowPhone" aria-live="polite"></div>
               </div>
             </div>
+            <div class="console is-idle" id="console">
+              <div class="console__bar">
+                <span class="platform-mark" aria-hidden="true"></span>
+                <span class="console__name" data-i18n="platform">Your booking platform</span>
+                <span class="console__title" data-i18n="inbox">WhatsApp inbox</span>
+              </div>
+              <div class="console__body">
+                <div class="console__list" id="flowList"></div>
+                <div class="console__thread">
+                  <div class="thread__head" id="flowHead"></div>
+                  <div class="thread__log" id="flowThread"></div>
+                  <div class="thread__input"><span class="thread__field" id="flowField"></span><span class="thread__send" id="flowSend" data-i18n="send">Send</span></div>
+                </div>
+              </div>
+            </div>
           </div>
+          <p class="stage-note" data-i18n="stageNote">Illustration with sample data. The staff screen looks different on each booking platform.</p>
         </div>
       </div>
     </div>
@@ -178,9 +236,9 @@ html:is([lang="ar"], [lang="bn"]) :is(h1, h2, .mo-wh__text) { line-height: 1.35;
       <p class="t-label" id="languages-h" data-i18n="langEye">Languages</p>
       <p class="mo-wh__text" data-i18n="langStatement">Every chat starts with one question: which language? English, Arabic and Bengali are ready on day one, and we add <strong>the languages your patients speak</strong> when you need them.</p>
       <div class="langs-row">
-        <div class="lang-card" lang="en"><b>Hello</b><span>English</span></div>
-        <div class="lang-card" lang="ar" dir="rtl"><b>مرحباً</b><span>العربية</span></div>
-        <div class="lang-card" lang="bn"><b>নমস্কার</b><span>বাংলা</span></div>
+        <div class="lang-card" lang="en"><b>Assalamu Alaykum</b><span>English</span></div>
+        <div class="lang-card" lang="ar" dir="rtl"><b>السلام عليكم</b><span>العربية</span></div>
+        <div class="lang-card" lang="bn"><b>আসসালামু আলাইকুম</b><span>বাংলা</span></div>
         <div class="lang-card lang-card--more"><b data-i18n="langMore">More on request</b><span data-i18n="langMoreP">Urdu, Hindi, Tagalog and others, added at setup</span></div>
       </div>
     </div>
@@ -215,37 +273,31 @@ html:is([lang="ar"], [lang="bn"]) :is(h1, h2, .mo-wh__text) { line-height: 1.35;
     </div>
   </section>
 
-  <section class="section auto ground-surface" id="packages" aria-labelledby="packages-h">
+  <section class="section auto ground-surface" id="setup" aria-labelledby="setup-h">
     <div class="wrap">
       <div class="section-head">
-        <p class="t-label" data-i18n="pkgEye">Packages</p>
-        <h2 id="packages-h" data-i18n="pkgH">Three packages. The assistant and the website in each one.</h2>
-        <p data-i18n="pkgP">Start with what your clinic needs now, and move up when you’re ready. Every package includes the WhatsApp assistant and your clinic website.</p>
+        <p class="t-label" data-i18n="setupEye">What we do</p>
+        <h2 id="setup-h" data-i18n="setupH">We set it up. Your patient data stays with the platform.</h2>
       </div>
-      <div class="tiers" id="tiers"></div>
-      <p class="tiers__note" data-i18n="pkgNote">Each package has a setup fee and a monthly plan. We quote once we know your clinic’s departments, doctors and number of branches.</p>
-    </div>
-  </section>
-
-  <section class="section auto" id="website" aria-labelledby="website-h">
-    <div class="wrap site-grid">
-      <div class="stack-5">
-        <p><span class="tag-incl"><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.8 2.8 6.2-6.4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="webTag">Included in every package</span></span></p>
-        <h2 id="website-h" data-i18n="webH">A website for your clinic, ready on day one</h2>
-        <p class="t-lead" data-i18n="webP">Your services, prices, doctors and hours, with a WhatsApp button that opens the assistant. Patients choose their language the moment they arrive.</p>
-        <ul class="ticks">
-          <li data-i18n="web1">Language choice on the first visit</li>
-          <li data-i18n="web2">Price ranges shown before patients book</li>
-          <li data-i18n="web3">A guide to which doctor to see</li>
-        </ul>
-        <div class="btn-row"><a class="btn btn--secondary" href="demos/clinic-website/" data-i18n="ctaSite">View the clinic website template</a></div>
-      </div>
-      <div class="site-shot">
-        <div class="browser">
-          <div class="browser__bar"><span class="browser__dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="browser__url">yourclinic.example</span></div>
-          <img src="assets/shots/clinic-website.jpg" width="1440" height="900" alt="The clinic website template: a doctor in the hero, a WhatsApp booking button, hours, location and languages" loading="lazy" data-i18n-alt="webAlt">
-        </div>
-        <div class="site-phone"><img src="assets/shots/clinic-website-phone.jpg" width="390" height="844" alt="The same website on a phone, opening with a choice of English, Arabic or Bengali" loading="lazy" data-i18n-alt="webPhoneAlt"></div>
+      <div class="value-cards">
+        <article class="value-card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="4.5" width="18" height="15" rx="2.5"/><path d="M3 9h18M6.5 6.8h.01M9 6.8h.01"/></svg>
+          <h3 data-i18n="v1h">Your website</h3>
+          <p data-i18n="v1p">Built in your patients’ languages and your clinic’s branding, with your services, doctors and hours.</p>
+          <span class="value-card__tag" data-i18n="free">Free</span>
+        </article>
+        <article class="value-card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M14.5 6.5a4 4 0 0 0-5.3 5.3L4 17v3h3l5.2-5.2a4 4 0 0 0 5.3-5.3l-2.5 2.5-2.3-.7-.7-2.3z"/></svg>
+          <h3 data-i18n="v2h">Set up for you</h3>
+          <p data-i18n="v2p">We help you choose the booking platform, connect it to your website and WhatsApp, and train your staff.</p>
+          <span class="value-card__tag" data-i18n="free">Free</span>
+        </article>
+        <article class="value-card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 3 5 6v5.5c0 4.3 3 8 7 9.5 4-1.5 7-5.2 7-9.5V6z"/><path d="m9 12 2 2 4-4"/></svg>
+          <h3 data-i18n="v3h">Patient data stays with the platform</h3>
+          <p data-i18n="v3p">Bookings and patient records live on the licensed booking platform, in the Kingdom where required under the PDPL. Metanor doesn’t store patient records.</p>
+          <span class="value-card__tag value-card__tag--muted" data-i18n="v3tag">Small monthly fee, paid directly</span>
+        </article>
       </div>
     </div>
   </section>
@@ -256,28 +308,27 @@ html:is([lang="ar"], [lang="bn"]) :is(h1, h2, .mo-wh__text) { line-height: 1.35;
         <div class="stack-4">
           <p class="t-label" data-i18n="inqEye">Get in touch</p>
           <h2 id="contact-h" data-i18n="inqH">Tell us what your clinic needs</h2>
-          <p class="t-lead" data-i18n="inqP">Request a setup of Clinic Suite, or brief us on something built around the way your clinic works.</p>
+          <p class="t-lead" data-i18n="inqP">Ask us to set up your clinic, or tell us about something else you need.</p>
         </div>
         <div class="beyond">
-          <p class="t-label" data-i18n="beyondEye">Beyond the suite</p>
-          <h3 data-i18n="beyondH">Bespoke systems, designed with your team</h3>
-          <p data-i18n="beyondP">When your clinic needs more than the suite, we scope, design and build it with you.</p>
+          <p class="t-label" data-i18n="beyondEye">Beyond the website</p>
+          <h3 data-i18n="beyondH">Need something more?</h3>
+          <p data-i18n="beyondP">Tell us what your clinic needs, and we’ll tell you honestly whether we can help.</p>
           <ul>
-            <li data-i18n="b1">Patient portals</li>
-            <li data-i18n="b2">Links to your clinic software</li>
-            <li data-i18n="b3">Tools for your staff</li>
-            <li data-i18n="b4">Reports and dashboards</li>
-            <li data-i18n="b5">Multi-branch booking</li>
+            <li data-i18n="b1">More patient languages</li>
+            <li data-i18n="b2">Websites for several branches</li>
+            <li data-i18n="b3">Campaign pages</li>
+            <li data-i18n="b4">More staff training</li>
           </ul>
-          <p><a class="link beyond__go" href="#contact" data-inquiry="bespoke" data-i18n="beyondGo">Start a bespoke inquiry</a></p>
+          <p><a class="link beyond__go" href="#contact" data-inquiry="bespoke" data-i18n="beyondGo">Tell us what you need</a></p>
         </div>
       </div>
       <div class="inq-form" id="inqWrap" data-kind="setup">
         <form class="form" id="inqForm" novalidate>
           <fieldset class="seg">
             <legend data-i18n="fKind">What are you looking for?</legend>
-            <div class="seg__opts"><label><input type="radio" name="kind" value="setup" checked><b data-i18n="kSetup">Set up Clinic Suite</b><span data-i18n="kSetupP">The WhatsApp assistant and website, with your details</span></label>
-            <label><input type="radio" name="kind" value="bespoke"><b data-i18n="kBespoke">A bespoke solution</b><span data-i18n="kBespokeP">A system designed and built around your clinic</span></label></div>
+            <div class="seg__opts"><label><input type="radio" name="kind" value="setup" checked><b data-i18n="kSetup">Set up my clinic</b><span data-i18n="kSetupP">Website, booking platform and WhatsApp, with staff training</span></label>
+            <label><input type="radio" name="kind" value="bespoke"><b data-i18n="kBespoke">Something else</b><span data-i18n="kBespokeP">Tell us what your clinic needs</span></label></div>
           </fieldset>
           <div class="field"><label for="f-name" data-i18n="fName">Your name</label>
             <input id="f-name" name="name" type="text" autocomplete="name" required aria-describedby="f-name-err">
@@ -294,13 +345,12 @@ html:is([lang="ar"], [lang="bn"]) :is(h1, h2, .mo-wh__text) { line-height: 1.35;
               <option value="1 branch, 10 or more doctors" data-i18n="z2">One branch, 10 or more doctors</option>
               <option value="Several branches" data-i18n="z3">Several branches</option>
             </select></div>
-          <div class="field field--full only-bespoke"><label for="f-area" data-i18n="fArea">What would you like built?</label>
+          <div class="field field--full only-bespoke"><label for="f-area" data-i18n="fArea">What do you need?</label>
             <select id="f-area" name="area">
-              <option value="Patient portal or app" data-i18n="a1">A patient portal or app</option>
-              <option value="Link to current clinic software" data-i18n="a2">A link to the software we already use</option>
-              <option value="Staff tools" data-i18n="a3">Tools for our staff</option>
-              <option value="Reports and dashboards" data-i18n="a4">Reports and dashboards</option>
-              <option value="More patient languages" data-i18n="a5">More languages for patients</option>
+              <option value="More patient languages" data-i18n="a1">More languages for patients</option>
+              <option value="Websites for several branches" data-i18n="a2">Websites for several branches</option>
+              <option value="Campaign pages" data-i18n="a3">Campaign or landing pages</option>
+              <option value="More staff training" data-i18n="a4">More staff training</option>
               <option value="Something else" data-i18n="a6">Something else</option>
             </select></div>
           <div class="field field--full"><label for="f-msg" data-i18n="fMsg">Tell us about your clinic</label>
@@ -322,11 +372,11 @@ html:is([lang="ar"], [lang="bn"]) :is(h1, h2, .mo-wh__text) { line-height: 1.35;
           <p><a class="link" href="#contact" data-inquiry="setup" data-i18n="faqGo">Ask a question</a></p>
         </div>
         <div class="faq span-6 start-7">
-          <div class="faq__item"><h3 data-i18n="q1">Does the assistant give medical advice?</h3><p data-i18n="q1a">No. It suggests a department to book and tells patients when to get urgent help. Medicine questions go to your staff.</p></div>
-          <div class="faq__item"><h3 data-i18n="q2">Which languages does it speak?</h3><p data-i18n="q2a">English, Arabic and Bengali, in the chat and on the website. We add other languages your patients speak during setup.</p></div>
-          <div class="faq__item"><h3 data-i18n="q3">Is the website really included?</h3><p data-i18n="q3a">Yes. Every package includes a clinic website built from the template, with your services, doctors, prices and branding.</p></div>
-          <div class="faq__item"><h3 data-i18n="q4">Whose details does the assistant use?</h3><p data-i18n="q4a">Your clinic’s own services, doctors, hours, fees and address. We set them up with you before launch.</p></div>
-          <div class="faq__item"><h3 data-i18n="q5">Are the demos linked to real patients?</h3><p data-i18n="q5a">No. Both demos run on made-up data and connect to no clinic, WhatsApp account or patient record.</p></div>
+          <div class="faq__item"><h3 data-i18n="q1">Does Metanor store patient records?</h3><p data-i18n="q1a">No. Bookings and patient records live on the licensed booking platform your clinic chooses, in the Kingdom where required under the PDPL. We build the website, connect the platform and train your staff.</p></div>
+          <div class="faq__item"><h3 data-i18n="q2">What does it cost?</h3><p data-i18n="q2a">The website and setup are free, as a community service. Your clinic pays the booking platform and WhatsApp messages directly, roughly SAR 100–300 a month for a small clinic.</p></div>
+          <div class="faq__item"><h3 data-i18n="q3">Which booking platform will we use?</h3><p data-i18n="q3a">One your clinic chooses, with our help. In Saudi Arabia there are licensed platforms such as Watily and Clinicy. A WhatsApp number can only connect to one platform, so in a live setup the WhatsApp chat usually comes from the booking platform.</p></div>
+          <div class="faq__item"><h3 data-i18n="q4">Does the WhatsApp chat give medical advice?</h3><p data-i18n="q4a">No. It can suggest a department and say when to get urgent help. Medical questions go to your staff.</p></div>
+          <div class="faq__item"><h3 data-i18n="q5">Are the demos linked to real patients?</h3><p data-i18n="q5a">No. Both demos run on made-up data and connect to no clinic, WhatsApp account or patient record. The WhatsApp demo shows the patient experience.</p></div>
         </div>
       </div>
     </div>
@@ -337,7 +387,7 @@ html:is([lang="ar"], [lang="bn"]) :is(h1, h2, .mo-wh__text) { line-height: 1.35;
   <div class="wrap">
     <div class="closing__cta close--word">
       <div class="section-head--split">
-        <div><h2 id="close-h" data-i18n="closeH">Bring Clinic Suite to your clinic</h2><p class="t-lead" data-i18n="closeP">The WhatsApp assistant and your clinic website, set up with your details.</p></div>
+        <div><h2 id="close-h" data-i18n="closeH">Bring Clinic Suite to your clinic</h2><p class="t-lead" data-i18n="closeP">Your website, booking platform and WhatsApp, set up for you. The website and setup are free.</p></div>
         <a class="btn btn--primary" href="#contact" data-inquiry="setup"><span data-i18n="ctaSetup">Request a setup</span><svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a>
       </div>
       <p class="close__lock" aria-hidden="true"><img src="assets/metanor-logo-white.svg" alt="" width="514" height="96" loading="lazy"><span>Clinic Suite</span></p>
@@ -345,16 +395,16 @@ html:is([lang="ar"], [lang="bn"]) :is(h1, h2, .mo-wh__text) { line-height: 1.35;
     <div class="closing__links">
       <div class="grid">
         <div class="span-4 stack-4">
-          <p class="footer__lede" data-i18n="footLede">A WhatsApp assistant and website for clinics, by Metanor.</p>
+          <p class="footer__lede" data-i18n="footLede">Clinic websites, booking platform setup and staff training, by Metanor.</p>
         </div>
-        <div class="span-2 footer__col"><h3>Clinic Suite</h3><ul><li><a href="#how" data-i18n="navHow">How it works</a></li><li><a href="#packages" data-i18n="navPackages">Packages</a></li></ul></div>
+        <div class="span-2 footer__col"><h3>Clinic Suite</h3><ul><li><a href="#how" data-i18n="navHow">How it works</a></li><li><a href="#setup" data-i18n="navSetup">What we do</a></li></ul></div>
         <div class="span-2 footer__col"><h3 data-i18n="fcDemos">Demos</h3><ul><li><a href="demos/whatsapp-assistant/" data-i18n="fdWa">WhatsApp demo</a></li><li><a href="demos/clinic-website/" data-i18n="fdSite">Website template</a></li></ul></div>
-        <div class="span-2 footer__col"><h3 data-i18n="fcHelp">Help</h3><ul><li><a href="#questions" data-i18n="navQuestions">Questions</a></li><li><a href="#contact" data-inquiry="bespoke" data-i18n="fdBespoke">Bespoke work</a></li></ul></div>
+        <div class="span-2 footer__col"><h3 data-i18n="fcHelp">Help</h3><ul><li><a href="#questions" data-i18n="navQuestions">Questions</a></li><li><a href="#contact" data-inquiry="bespoke" data-i18n="fdBespoke">Something else</a></li></ul></div>
         <div class="span-2 footer__col"><h3 data-i18n="fcContact">Contact</h3><ul><li><a href="mailto:contact@metanor.org" data-i18n="fdEmail">Email us</a></li></ul></div>
       </div>
       <div class="footer__legal">
         <span>&copy; 2026 Metanor</span>
-        <span data-i18n="legal">Demos run on made-up data</span>
+        <span data-i18n="legal">Demos only. Sample data, not connected to a clinic, WhatsApp or patient records.</span>
       </div>
     </div>
   </div>
