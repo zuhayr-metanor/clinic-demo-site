@@ -660,7 +660,7 @@
         [x.stop, flows.optOut]
       ]);
     },
-    async optOuc() { activity('opt'); await bot(c().stopped); menu(); },
+    async optOut() { activity('opt'); await bot(c().stopped); menu(); },
 
     async aftercare() {
       const x = c();
@@ -671,7 +671,7 @@
       chips([[x.acGood, async () => { await bot(x.acGoodR); menu(); }], [x.acBleed, urgent], [x.acSwell, urgent]]);
     },
 
-    async urgenc() {
+    async urgent() {
       const x = c();
       if (tier < 2) { await bot(x.handover); addQueue('pain', true); explain('handover'); menu(); return; }
       await bot(x.uQ); explain('urgent');
