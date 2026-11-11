@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Metanor Clinic Suite: clinic websites, booking setup and WhatsApp</title>
-<meta name="description" content="Metanor builds your clinic’s website, connects it to a trusted booking platform and WhatsApp, and trains your staff. The website and setup are free.">
+<title>Metanor Clinic Suite: a website for your clinic, in every patient’s language</title>
+<meta name="description" content="Metanor builds your clinic’s website in your patients’ languages, connects it to a trusted booking platform, and can add WhatsApp next. The website is free.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Metanor Clinic Suite">
-<meta property="og:description" content="Clinic websites in your patients’ languages, connected to a trusted booking platform and WhatsApp. The website and setup are free.">
+<meta property="og:description" content="A clinic website in your patients’ languages, found on Google and easy to book from. The website is free.">
 <meta property="og:image" content="share.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
@@ -72,9 +72,9 @@ html:is([lang="ar"], [lang="bn"]) :is(h1, h2, .mo-wh__text) { line-height: 1.35;
     <a class="skip-link" href="#top" data-i18n="skip">Skip to content</a>
     <a class="nav__logo lockup" href="#top" aria-label="Metanor Clinic Suite"><img src="assets/metanor-logo-green.svg" alt="Metanor" width="514" height="96"><span class="lockup__suite">Clinic Suite</span></a>
     <nav class="nav__links" aria-label="Main">
-      <div class="nav__item"><a class="nav__link" href="#demos" data-i18n="navDemos">Demos</a></div>
+      <div class="nav__item"><a class="nav__link" href="#website" data-i18n="navWebsite">Website</a></div>
+      <div class="nav__item"><a class="nav__link" href="#chat" data-i18n="navWa">WhatsApp</a></div>
       <div class="nav__item"><a class="nav__link" href="#how" data-i18n="navHow">How it works</a></div>
-      <div class="nav__item"><a class="nav__link" href="#setup" data-i18n="navSetup">What we do</a></div>
       <div class="nav__item"><a class="nav__link" href="#questions" data-i18n="navQuestions">Questions</a></div>
     </nav>
     <div class="nav__actions">
@@ -95,30 +95,21 @@ html:is([lang="ar"], [lang="bn"]) :is(h1, h2, .mo-wh__text) { line-height: 1.35;
     <div class="wrap"><div class="hero-text grid hero__grid">
       <div class="hero__text span-6">
         <p class="hero__kicker"><span class="dot" aria-hidden="true"></span><span data-i18n="kicker">Metanor Clinic Suite</span></p>
-        <h1 id="hero-h" data-i18n="h1">Your clinic online and on WhatsApp, in your patients’ languages</h1>
-        <p class="hero__lead" data-i18n="lead">We build your clinic’s website, connect it to a trusted booking platform and WhatsApp, and train your staff. The website and setup are free.</p>
+        <h1 id="hero-h" data-i18n="h1">A website for your clinic, in every patient’s language</h1>
+        <p class="hero__lead" data-i18n="lead">Patients find you on Google, read about your services in their own language and book in a few taps. We build it and connect it to a trusted booking platform, and WhatsApp can come next. The website is free.</p>
         <div class="btn-row">
           <a class="btn btn--primary" href="#contact" data-inquiry="setup"><span data-i18n="ctaSetup">Request a setup</span><svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a>
-          <a class="btn btn--secondary" href="demos/whatsapp-assistant/" data-i18n="ctaDemo">Try the WhatsApp demo</a>
-          <a class="btn--text" href="demos/clinic-website/" data-i18n="ctaSite">View the clinic website template</a>
+          <a class="btn btn--secondary" href="demos/clinic-website/" data-i18n="ctaSite">View the clinic website template</a>
+          <a class="btn--text" href="demos/whatsapp-assistant/" data-i18n="ctaDemo">Try the WhatsApp demo</a>
         </div>
       </div>
-      <div class="hero__media device-stage span-6 start-7">
-        <div class="device ui" role="img" aria-label="A patient chooses their language on WhatsApp, describes a headache and gets a visit booked with a token number" data-i18n-aria="heroAlt">
-          <div class="screen">
-            <div class="screen__head">
-              <span class="screen__av" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M16 6h8v10h10v8H24v10h-8V24H6v-8h10z" fill="#0b5a3c"/></svg></span>
-              <span><span class="screen__name" data-i18n="clinicName">Sample Clinic</span><span class="screen__status" data-i18n="clinicStatus">Assistant · staff on hand</span></span>
-            </div>
-            <div class="screen__log">
-              <div class="bubble bubble--bot" dir="auto">Please choose your language.
-يرجى اختيار لغتك.
-আপনার ভাষা বেছে নিন।<span class="bubble__chips"><span data-pick="en">English</span><span data-pick="ar">العربية</span><span data-pick="bn">বাংলা</span></span></div>
-              <div class="bubble bubble--me" data-i18n="heroQ">I have a headache and nausea. Can I see a doctor today?</div>
-              <div class="bubble bubble--bot"><span data-i18n="heroA">Sorry to hear that. I can’t give medical advice, but our general medicine doctors can check it. Which time suits you?</span><span class="bubble__chips"><span>4:30</span><span class="is-picked">5:15</span><span>7:00</span></span></div>
-              <div class="bubble bubble--bot"><span data-i18n="heroBooked">Booked: General medicine, today at 5:15 PM.</span><span class="bubble__token"><span data-i18n="token">Your token number</span><b>A-43</b></span><span class="bubble__time">16:02</span></div>
-            </div>
+      <div class="hero__media site-stage span-6 start-7">
+        <div class="hero-site" role="img" aria-label="The clinic website template on a laptop and a phone, opening with a choice of English, Arabic or Bengali" data-i18n-aria="heroAlt">
+          <div class="browser">
+            <div class="browser__bar"><span class="browser__dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="browser__url">yourclinic.example</span></div>
+            <img src="assets/shots/clinic-website.jpg" width="1440" height="900" alt="">
           </div>
+          <div class="site-phone"><img src="assets/shots/clinic-website-phone.jpg" width="390" height="844" alt=""></div>
         </div>
       </div>
     </div></div>
@@ -133,6 +124,19 @@ html:is([lang="ar"], [lang="bn"]) :is(h1, h2, .mo-wh__text) { line-height: 1.35;
       </div>
       <div class="demo-cards">
         <article class="demo-card">
+          <a class="demo-card__shot" href="demos/clinic-website/" tabindex="-1" aria-hidden="true"><img src="assets/shots/clinic-website.jpg" width="1440" height="900" alt="" loading="lazy"></a>
+          <div class="demo-card__body">
+            <h3 data-i18n="dSiteH">Clinic website template</h3>
+            <p data-i18n="dSiteP">Your services, doctors and hours, with buttons that lead patients to book. Patients choose their language the moment they arrive.</p>
+            <ul class="ticks">
+              <li data-i18n="dSite1">English, Arabic and Bengali</li>
+              <li data-i18n="dSite2">A “Which doctor do I need?” guide</li>
+              <li data-i18n="dSite3">Online booking and a one-tap WhatsApp button</li>
+            </ul>
+            <p><a class="btn btn--primary" href="demos/clinic-website/" data-i18n="ctaSite">View the clinic website template</a></p>
+          </div>
+        </article>
+        <article class="demo-card">
           <a class="demo-card__shot demo-card__shot--phone" href="demos/whatsapp-assistant/" tabindex="-1" aria-hidden="true"><img src="assets/shots/whatsapp-demo.jpg" width="370" height="580" alt="" loading="lazy"></a>
           <div class="demo-card__body">
             <h3 data-i18n="dWaH">WhatsApp patient chat</h3>
@@ -142,22 +146,46 @@ html:is([lang="ar"], [lang="bn"]) :is(h1, h2, .mo-wh__text) { line-height: 1.35;
               <li data-i18n="dWa2">Suggests a department, never gives medical advice</li>
               <li data-i18n="dWa3">Hands anything medical to your staff</li>
             </ul>
-            <p><a class="btn btn--primary" href="demos/whatsapp-assistant/" data-i18n="ctaDemo">Try the WhatsApp demo</a></p>
+            <p><a class="btn btn--secondary" href="demos/whatsapp-assistant/" data-i18n="ctaDemo">Try the WhatsApp demo</a></p>
           </div>
         </article>
-        <article class="demo-card">
-          <a class="demo-card__shot" href="demos/clinic-website/" tabindex="-1" aria-hidden="true"><img src="assets/shots/clinic-website.jpg" width="1440" height="900" alt="" loading="lazy"></a>
-          <div class="demo-card__body">
-            <h3 data-i18n="dSiteH">Clinic website template</h3>
-            <p data-i18n="dSiteP">Your services, doctors, hours and price ranges, with buttons that lead patients to book. Patients choose their language the moment they arrive.</p>
-            <ul class="ticks">
-              <li data-i18n="dSite1">English, Arabic and Bengali</li>
-              <li data-i18n="dSite2">A “Which doctor do I need?” guide</li>
-              <li data-i18n="dSite3">Price ranges before patients book</li>
-            </ul>
-            <p><a class="btn btn--secondary" href="demos/clinic-website/" data-i18n="ctaSite">View the clinic website template</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section auto ground-surface" id="website" aria-labelledby="website-h">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="t-label" data-i18n="webEye">Your website</p>
+        <h2 id="website-h" data-i18n="webH">Everything a patient needs, in their own language</h2>
+        <p data-i18n="webP">Built around your clinic: your services, doctors and hours, on a site patients can read, trust and book from.</p>
+      </div>
+      <div class="web-grid">
+        <div class="caps">
+          <div class="cap cap--lead"><b data-i18n="w1h">In the patient’s language</b><span data-i18n="w1p">English, Arabic and Bengali. Patients choose on arrival, and Arabic reads right to left.</span></div>
+          <div class="cap"><b data-i18n="w2h">Found on Google</b><span data-i18n="w2p">Set up so patients searching for a clinic nearby can find you on Google and Maps.</span></div>
+          <div class="cap"><b data-i18n="w3h">Works on every phone</b><span data-i18n="w3p">Most patients visit on a phone, so it’s built for phones first.</span></div>
+          <div class="cap"><b data-i18n="w4h">Services, doctors and hours</b><span data-i18n="w4p">What patients ask about most, in one place and easy to keep up to date.</span></div>
+          <div class="cap"><b data-i18n="w5h">Online booking</b><span data-i18n="w5p">Book buttons that open your booking platform, at any time of day.</span></div>
+          <div class="cap"><b data-i18n="w6h">One-tap WhatsApp</b><span data-i18n="w6p">A button that opens a chat with your clinic, with a message ready to send.</span></div>
+          <div class="cap"><b data-i18n="w7h">Looks professional</b><span data-i18n="w7p">A clean, modern site that builds trust before the first visit.</span></div>
+          <p class="caps__go"><a class="btn btn--primary" href="demos/clinic-website/" data-i18n="ctaSite">View the clinic website template</a></p>
+        </div>
+        <div class="lang-view">
+          <div class="lang-tabs" role="tablist" aria-label="Website language">
+            <button type="button" role="tab" aria-selected="true" data-shot="en" lang="en">English</button>
+            <button type="button" role="tab" aria-selected="false" data-shot="ar" lang="ar">العربية</button>
+            <button type="button" role="tab" aria-selected="false" data-shot="bn" lang="bn">বাংলা</button>
           </div>
-        </article>
+          <div class="browser">
+            <div class="browser__bar"><span class="browser__dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="browser__url">yourclinic.example</span></div>
+            <div class="lang-shots">
+              <img class="is-on" data-shot="en" src="assets/shots/clinic-website.jpg" width="1440" height="900" alt="The clinic website template in English" loading="lazy">
+              <img data-shot="ar" src="assets/shots/clinic-website-ar.jpg" width="1440" height="900" alt="The clinic website template in Arabic, right to left" loading="lazy">
+              <img data-shot="bn" src="assets/shots/clinic-website-bn.jpg" width="1440" height="900" alt="The clinic website template in Bengali" loading="lazy">
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -173,14 +201,14 @@ html:is([lang="ar"], [lang="bn"]) :is(h1, h2, .mo-wh__text) { line-height: 1.35;
         <li><span class="steps3__n" aria-hidden="true">2</span><h3 data-i18n="st2h">Bookings run on a trusted platform</h3><p data-i18n="st2p">Bookings and patient records run on a licensed booking platform that we help you choose.</p></li>
         <li><span class="steps3__n" aria-hidden="true">3</span><h3 data-i18n="st3h">We connect it and train your staff</h3><p data-i18n="st3p">We connect the platform to your website and WhatsApp, and train your team to use it.</p></li>
       </ol>
-      <p class="cost-line"><b data-i18n="costB">What it costs:</b> <span data-i18n="cost">The website and setup are free, as a community service. The booking platform and WhatsApp messages have small monthly fees that your clinic pays directly, roughly SAR 100–300 a month for a small clinic.</span></p>
+      <p class="cost-line"><b data-i18n="costB">The website is free.</b> <span data-i18n="cost">Everything else, we plan together with you once we know what your clinic needs.</span></p>
     </div>
   </section>
 
-  <section class="section auto" id="chat" aria-labelledby="chat-h">
+  <section class="section auto compact" id="chat" aria-labelledby="chat-h">
     <div class="wrap">
       <div class="section-head">
-        <p class="t-label" data-i18n="chatEye">On WhatsApp</p>
+        <p class="t-label" data-i18n="chatEye">Next step: WhatsApp</p>
         <h2 id="chat-h" data-i18n="chatH">One chat, from the patient’s first message to your front desk</h2>
         <p data-i18n="chatP">Routine questions get an instant answer. When a question needs a person, your staff pick it up and reply in the same WhatsApp chat.</p>
       </div>
@@ -188,7 +216,7 @@ html:is([lang="ar"], [lang="bn"]) :is(h1, h2, .mo-wh__text) { line-height: 1.35;
         <div>
           <ol class="steps" id="steps">
             <li><button type="button" data-step="0"><b data-i18n="s1h">The patient writes on WhatsApp</b><span data-i18n="s1p">They choose their language, then ask in their own words.</span></button></li>
-            <li><button type="button" data-step="1"><b data-i18n="s2h">An instant answer</b><span data-i18n="s2p">Prices, hours, directions and bookings, from details your clinic approves.</span></button></li>
+            <li><button type="button" data-step="1"><b data-i18n="s2h">An instant answer</b><span data-i18n="s2p">Hours, directions and bookings, from details your clinic approves.</span></button></li>
             <li><button type="button" data-step="2"><b data-i18n="s3h">Handed over when it needs a person</b><span data-i18n="s3p">Insurance, medical questions and anything unclear go to your staff, with the reason shown.</span></button></li>
             <li><button type="button" data-step="3"><b data-i18n="s4h">Your staff reply</b><span data-i18n="s4p">From your booking platform’s WhatsApp inbox. The patient sees it in the same chat.</span></button></li>
           </ol>
@@ -231,7 +259,7 @@ html:is([lang="ar"], [lang="bn"]) :is(h1, h2, .mo-wh__text) { line-height: 1.35;
     </div>
   </section>
 
-  <section class="section auto ground-surface" id="languages" data-moment="word-highlight" aria-labelledby="languages-h">
+  <section class="section auto ground-surface compact" id="languages" data-moment="word-highlight" aria-labelledby="languages-h">
     <div class="wrap">
       <p class="t-label" id="languages-h" data-i18n="langEye">Languages</p>
       <p class="mo-wh__text" data-i18n="langStatement">Every chat starts with one question: which language? English, Arabic and Bengali are ready on day one, and we add <strong>the languages your patients speak</strong> when you need them.</p>
@@ -244,7 +272,7 @@ html:is([lang="ar"], [lang="bn"]) :is(h1, h2, .mo-wh__text) { line-height: 1.35;
     </div>
   </section>
 
-  <section class="section auto" id="staff" aria-labelledby="staff-h">
+  <section class="section auto compact" id="staff" aria-labelledby="staff-h">
     <div class="wrap">
       <div class="section-head">
         <p class="t-label" data-i18n="staffEye">Your staff stay in charge</p>
@@ -254,7 +282,7 @@ html:is([lang="ar"], [lang="bn"]) :is(h1, h2, .mo-wh__text) { line-height: 1.35;
         <div class="who">
           <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="5" y="7" width="14" height="11" rx="3"/><path d="M12 3.5V7M9 12h.01M15 12h.01M9.5 15h5"/></svg><span data-i18n="botH">The assistant handles</span></h3>
           <ul class="ticks">
-            <li data-i18n="bot1">Prices, hours, location and offers your clinic approves</li>
+            <li data-i18n="bot1">Hours, location and details your clinic approves</li>
             <li data-i18n="bot2">Pointing patients to the right department</li>
             <li data-i18n="bot3">Bookings, token numbers and reminders</li>
             <li data-i18n="bot4">Changes and cancellations</li>
@@ -290,13 +318,11 @@ html:is([lang="ar"], [lang="bn"]) :is(h1, h2, .mo-wh__text) { line-height: 1.35;
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M14.5 6.5a4 4 0 0 0-5.3 5.3L4 17v3h3l5.2-5.2a4 4 0 0 0 5.3-5.3l-2.5 2.5-2.3-.7-.7-2.3z"/></svg>
           <h3 data-i18n="v2h">Set up for you</h3>
           <p data-i18n="v2p">We help you choose the booking platform, connect it to your website and WhatsApp, and train your staff.</p>
-          <span class="value-card__tag" data-i18n="free">Free</span>
         </article>
         <article class="value-card">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 3 5 6v5.5c0 4.3 3 8 7 9.5 4-1.5 7-5.2 7-9.5V6z"/><path d="m9 12 2 2 4-4"/></svg>
           <h3 data-i18n="v3h">Patient data stays with the platform</h3>
           <p data-i18n="v3p">Bookings and patient records live on the licensed booking platform, in the Kingdom where required under the PDPL. Metanor doesn’t store patient records.</p>
-          <span class="value-card__tag value-card__tag--muted" data-i18n="v3tag">Small monthly fee, paid directly</span>
         </article>
       </div>
     </div>
@@ -373,7 +399,7 @@ html:is([lang="ar"], [lang="bn"]) :is(h1, h2, .mo-wh__text) { line-height: 1.35;
         </div>
         <div class="faq span-6 start-7">
           <div class="faq__item"><h3 data-i18n="q1">Does Metanor store patient records?</h3><p data-i18n="q1a">No. Bookings and patient records live on the licensed booking platform your clinic chooses, in the Kingdom where required under the PDPL. We build the website, connect the platform and train your staff.</p></div>
-          <div class="faq__item"><h3 data-i18n="q2">What does it cost?</h3><p data-i18n="q2a">The website and setup are free, as a community service. Your clinic pays the booking platform and WhatsApp messages directly, roughly SAR 100–300 a month for a small clinic.</p></div>
+          <div class="faq__item"><h3 data-i18n="q2">What does it cost?</h3><p data-i18n="q2a">The website is free. Everything else we go through with you, based on what your clinic needs.</p></div>
           <div class="faq__item"><h3 data-i18n="q3">Which booking platform will we use?</h3><p data-i18n="q3a">One your clinic chooses, with our help. In Saudi Arabia there are licensed platforms such as Watily and Clinicy. A WhatsApp number can only connect to one platform, so in a live setup the WhatsApp chat usually comes from the booking platform.</p></div>
           <div class="faq__item"><h3 data-i18n="q4">Does the WhatsApp chat give medical advice?</h3><p data-i18n="q4a">No. It can suggest a department and say when to get urgent help. Medical questions go to your staff.</p></div>
           <div class="faq__item"><h3 data-i18n="q5">Are the demos linked to real patients?</h3><p data-i18n="q5a">No. Both demos run on made-up data and connect to no clinic, WhatsApp account or patient record. The WhatsApp demo shows the patient experience.</p></div>
@@ -387,7 +413,7 @@ html:is([lang="ar"], [lang="bn"]) :is(h1, h2, .mo-wh__text) { line-height: 1.35;
   <div class="wrap">
     <div class="closing__cta close--word">
       <div class="section-head--split">
-        <div><h2 id="close-h" data-i18n="closeH">Bring Clinic Suite to your clinic</h2><p class="t-lead" data-i18n="closeP">Your website, booking platform and WhatsApp, set up for you. The website and setup are free.</p></div>
+        <div><h2 id="close-h" data-i18n="closeH">Bring Clinic Suite to your clinic</h2><p class="t-lead" data-i18n="closeP">Your website first, connected to a trusted booking platform, with WhatsApp when you’re ready. The website is free.</p></div>
         <a class="btn btn--primary" href="#contact" data-inquiry="setup"><span data-i18n="ctaSetup">Request a setup</span><svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a>
       </div>
       <p class="close__lock" aria-hidden="true"><img src="assets/metanor-logo-white.svg" alt="" width="514" height="96" loading="lazy"><span>Clinic Suite</span></p>
@@ -397,7 +423,7 @@ html:is([lang="ar"], [lang="bn"]) :is(h1, h2, .mo-wh__text) { line-height: 1.35;
         <div class="span-4 stack-4">
           <p class="footer__lede" data-i18n="footLede">Clinic websites, booking platform setup and staff training, by Metanor.</p>
         </div>
-        <div class="span-2 footer__col"><h3>Clinic Suite</h3><ul><li><a href="#how" data-i18n="navHow">How it works</a></li><li><a href="#setup" data-i18n="navSetup">What we do</a></li></ul></div>
+        <div class="span-2 footer__col"><h3>Clinic Suite</h3><ul><li><a href="#website" data-i18n="navWebsite">Website</a></li><li><a href="#chat" data-i18n="navWa">WhatsApp</a></li></ul></div>
         <div class="span-2 footer__col"><h3 data-i18n="fcDemos">Demos</h3><ul><li><a href="demos/whatsapp-assistant/" data-i18n="fdWa">WhatsApp demo</a></li><li><a href="demos/clinic-website/" data-i18n="fdSite">Website template</a></li></ul></div>
         <div class="span-2 footer__col"><h3 data-i18n="fcHelp">Help</h3><ul><li><a href="#questions" data-i18n="navQuestions">Questions</a></li><li><a href="#contact" data-inquiry="bespoke" data-i18n="fdBespoke">Something else</a></li></ul></div>
         <div class="span-2 footer__col"><h3 data-i18n="fcContact">Contact</h3><ul><li><a href="mailto:contact@metanor.org" data-i18n="fdEmail">Email us</a></li></ul></div>

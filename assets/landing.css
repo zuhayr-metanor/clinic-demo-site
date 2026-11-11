@@ -283,3 +283,46 @@ html[dir="rtl"] .link::after { content: "\2190"; }
 .platform-mark { width: 18px; height: 18px; border-radius: 5px; background: repeating-linear-gradient(45deg, #cfd9d2 0 4px, #e3e9e4 4px 8px); flex: none; }
 .console__name { font-weight: 600; font-size: 13px; color: #3d5246; }
 .stage-note { margin-top: 10px; font-size: 13.5px; color: var(--muted); }
+
+/* Hero: the website leads (laptop and phone) */
+.hero__media.site-stage { background: var(--ground-bg); display: flex; align-items: center; justify-content: center; overflow: hidden; padding: clamp(20px, 3vw, 40px); }
+.hero-site { position: relative; width: 100%; padding-right: 9%; padding-bottom: 7%; }
+.hero-site .browser { box-shadow: 0 40px 80px -40px rgba(15, 42, 31, .55); }
+.hero-site .site-phone { right: 0; bottom: 0; width: 27%; min-width: 96px; }
+html[dir="rtl"] .hero-site { padding-right: 0; padding-left: 9%; }
+html[dir="rtl"] .hero-site .site-phone { right: auto; left: 0; }
+@media (max-width: 639px) { .hero__media.site-stage { padding: 16px; } }
+
+/* Website section: benefits beside the site in three languages */
+main > section.section.auto#website { padding-block: clamp(80px, 10vw, 136px); }
+.web-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(28px, 4vw, 64px); align-items: start; }
+.caps { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 24px; align-content: start; }
+.cap { display: grid; gap: 4px; padding-top: 14px; border-top: 1px solid var(--line-strong); }
+.cap b { font: 500 18px/1.3 var(--font-display); letter-spacing: 0; }
+.cap span { color: var(--muted); font-size: 15px; line-height: 1.5; }
+.cap--lead { grid-column: 1 / -1; padding: 18px 20px; border: 0; border-radius: 16px; background: var(--accent); color: #fff; }
+.cap--lead b { font-size: 22px; }
+.cap--lead span { color: rgba(255, 255, 255, .85); font-size: 16px; }
+.caps__go { grid-column: 1 / -1; margin-top: 8px; }
+.lang-view { position: sticky; top: calc(var(--nav, 64px) + 24px); display: grid; gap: 14px; }
+.lang-tabs { display: inline-flex; justify-self: start; gap: 4px; padding: 4px; border-radius: 12px; background: var(--bg); border: 1px solid var(--line); }
+.lang-tabs button { border: 0; border-radius: 9px; padding: 9px 16px; background: transparent; color: var(--ink); font: 500 15px/1 var(--font-text); cursor: pointer; transition: background-color .2s, color .2s; }
+.lang-tabs button[lang="ar"] { font-family: "IBM Plex Sans Arabic", sans-serif; }
+.lang-tabs button[lang="bn"] { font-family: "Hind Siliguri", sans-serif; }
+.lang-tabs button[aria-selected="true"] { background: var(--accent); color: #fff; }
+.lang-shots { position: relative; aspect-ratio: 1440 / 900; }
+.lang-shots img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .35s var(--ease); }
+.lang-shots img.is-on { opacity: 1; }
+@media (max-width: 1023px) { .web-grid { grid-template-columns: minmax(0, 1fr); } .lang-view { position: static; order: -1; } }
+@media (max-width: 639px) { .caps { grid-template-columns: minmax(0, 1fr); } }
+
+/* WhatsApp is the add-on: its sections sit a little smaller */
+main > section.section.auto.compact { padding-block: clamp(56px, 7vw, 88px); }
+.compact .section-head h2 { font-size: clamp(28px, 3.2vw, 40px); }
+.compact .stage2 { height: 500px; }
+#languages.compact .mo-wh__text { font-size: clamp(24px, 2.6vw, 34px); max-width: 860px; }
+#languages.compact .lang-card { padding: 16px 18px; }
+#languages.compact .lang-card b { font-size: 22px; }
+#staff.compact .who { padding: clamp(20px, 2.4vw, 28px); gap: 14px; }
+#staff.compact .who h3 { font-size: 19px; }
+#staff.compact .ticks { gap: 8px; font-size: 15px; }

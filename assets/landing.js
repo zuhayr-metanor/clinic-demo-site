@@ -18,7 +18,14 @@
     document.querySelectorAll('[data-i18n-ph]').forEach(el => { const v = d[el.dataset.i18nPh]; if (v) el.placeholder = v; });
   }
   document.querySelectorAll('[data-lang-name]').forEach(el => { el.textContent = I.names[lang]; });
-  document.querySelectorAll('.hero [data-pick]').forEach(el => el.classList.toggle('is-picked', el.dataset.pick === lang));
+  /* ---- website section: the same site in each language (opens on the page's own language) */
+  const tabs = [...document.querySelectorAll('.lang-tabs [data-shot]')], shots = [...document.querySelectorAll('.lang-shots [data-shot]')];
+  const showShot = k => {
+    tabs.forEach(t => t.setAttribute('aria-selected', String(t.dataset.shot === k)));
+    shots.forEach(i => { i.classList.toggle('is-on', i.dataset.shot === k); if (i.dataset.shot === k) i.loading = 'eager'; });
+  };
+  tabs.forEach(t => { t.onclick = () => showShot(t.dataset.shot); });
+  showShot(lang);
 
   /* ---- language chooser: on the first visit, and from the bar */
   const dlg = $('chooser');
